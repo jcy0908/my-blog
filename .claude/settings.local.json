@@ -18,7 +18,12 @@
       "Bash(git config *)",
       "Read(//Users/jeongchan-yong/**)",
       "Bash(security find-internet-password *)",
-      "Bash(brew --version)"
+      "Bash(brew --version)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(git push *)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(open -a \"GitHub Desktop\")",
+      "Bash(uuidgen)"
     ]
   }
 }
