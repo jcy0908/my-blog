@@ -67,7 +67,26 @@ ${bodyHtml}
 `;
 }
 
-export function renderIndexPage(posts) {
+function renderAppCards(apps) {
+  if (!Array.isArray(apps) || apps.length === 0) return '';
+
+  const cards = apps
+    .map(
+      (app) => `  <li class="app-card">
+    <iframe class="app-preview" src="./apps/${app.path}/index.html" title="${escapeHtml(app.title)} 미리보기" loading="lazy" sandbox="allow-scripts"></iframe>
+    <h3><a href="./apps/${app.path}/index.html">${escapeHtml(app.title)}</a></h3>
+    <p>${escapeHtml(app.description)}</p>
+  </li>`
+    )
+    .join('\n');
+
+  return `<h2>Mini Apps</h2>
+<ul class="app-list">
+${cards}
+</ul>`;
+}
+
+export function renderIndexPage(posts, apps = []) {
   const items = posts
     .map(
       (post) => `  <li class="post-list-item">
@@ -80,7 +99,8 @@ export function renderIndexPage(posts) {
   const bodyHtml = `<h1>Posts</h1>
 <ul class="post-list">
 ${items}
-</ul>`;
+</ul>
+${renderAppCards(apps)}`;
 
   return layout({ title: 'My Blog', basePath: './', bodyHtml });
 }
