@@ -95,6 +95,21 @@ main,
   text-decoration: none;
 }
 
+.site-nav {
+  margin-inline-start: auto;
+  margin-inline-end: var(--space-1);
+}
+
+.site-nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+
+.site-nav a:hover {
+  color: var(--color-text);
+}
+
 .theme-toggle {
   display: inline-flex;
   align-items: center;
