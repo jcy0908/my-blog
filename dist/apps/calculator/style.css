@@ -1,0 +1,286 @@
+/* ===== CSS 변수: 라이트 테마 (기본값) ===== */
+:root {
+  --bg: #faf8f5;
+  --text-color: #3a352f;
+  --text-strong: #24211d;
+  --panel-bg: #ffffff;
+  --border-color: #ddd6cd;
+  --key-bg: #eeeae2;
+  --key-color: #3a352f;
+  --key-hover-bg: #e2ddd2;
+  --key-op-bg: #4a6fa5;
+  --key-op-color: #ffffff;
+  --key-op-hover-bg: #3f5f8f;
+  --key-fn-bg: #ddd6cb;
+  --key-fn-color: #3a352f;
+  --key-fn-hover-bg: #cfc7ba;
+  --key-equals-bg: #3f8f5f;
+  --key-equals-color: #ffffff;
+  --key-equals-hover-bg: #347a4f;
+  --display-bg: #232019;
+  --display-color: #f5f2ec;
+  --display-sub-color: #b3aa9a;
+  --hint-color: #726b60;
+  --danger-color: #c0553a;
+}
+
+/* ===== 다크 테마: 시스템 설정 자동 감지 ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171614;
+    --text-color: #e5e1d8;
+    --text-strong: #f5f2ec;
+    --panel-bg: #232019;
+    --border-color: #3a352b;
+    --key-bg: #2f2b23;
+    --key-color: #f5f2ec;
+    --key-hover-bg: #3a352b;
+    --key-op-bg: #7ea6da;
+    --key-op-color: #0f1b2b;
+    --key-op-hover-bg: #6a92c4;
+    --key-fn-bg: #3a352b;
+    --key-fn-color: #f5f2ec;
+    --key-fn-hover-bg: #48412f;
+    --key-equals-bg: #4aa872;
+    --key-equals-color: #0f1b13;
+    --key-equals-hover-bg: #3d9061;
+    --display-bg: #100f0d;
+    --display-color: #f5f2ec;
+    --display-sub-color: #8a8172;
+    --hint-color: #b3aa9a;
+    --danger-color: #d97659;
+  }
+}
+
+/* ===== 수동 토글: data-theme 속성이 시스템 설정보다 우선 ===== */
+:root[data-theme="light"] {
+  --bg: #faf8f5;
+  --text-color: #3a352f;
+  --text-strong: #24211d;
+  --panel-bg: #ffffff;
+  --border-color: #ddd6cd;
+  --key-bg: #eeeae2;
+  --key-color: #3a352f;
+  --key-hover-bg: #e2ddd2;
+  --key-op-bg: #4a6fa5;
+  --key-op-color: #ffffff;
+  --key-op-hover-bg: #3f5f8f;
+  --key-fn-bg: #ddd6cb;
+  --key-fn-color: #3a352f;
+  --key-fn-hover-bg: #cfc7ba;
+  --key-equals-bg: #3f8f5f;
+  --key-equals-color: #ffffff;
+  --key-equals-hover-bg: #347a4f;
+  --display-bg: #232019;
+  --display-color: #f5f2ec;
+  --display-sub-color: #b3aa9a;
+  --hint-color: #726b60;
+  --danger-color: #c0553a;
+}
+
+:root[data-theme="dark"] {
+  --bg: #171614;
+  --text-color: #e5e1d8;
+  --text-strong: #f5f2ec;
+  --panel-bg: #232019;
+  --border-color: #3a352b;
+  --key-bg: #2f2b23;
+  --key-color: #f5f2ec;
+  --key-hover-bg: #3a352b;
+  --key-op-bg: #7ea6da;
+  --key-op-color: #0f1b2b;
+  --key-op-hover-bg: #6a92c4;
+  --key-fn-bg: #3a352b;
+  --key-fn-color: #f5f2ec;
+  --key-fn-hover-bg: #48412f;
+  --key-equals-bg: #4aa872;
+  --key-equals-color: #0f1b13;
+  --key-equals-hover-bg: #3d9061;
+  --display-bg: #100f0d;
+  --display-color: #f5f2ec;
+  --display-sub-color: #8a8172;
+  --hint-color: #b3aa9a;
+  --danger-color: #d97659;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+.app {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.4rem;
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.icon-button {
+  border: 1px solid var(--border-color);
+  background: var(--panel-bg);
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.icon-button:hover {
+  background: var(--key-hover-bg);
+}
+
+.hint {
+  margin: 0;
+  color: var(--hint-color);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.calculator {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.display {
+  background: var(--display-bg);
+  color: var(--display-color);
+  border-radius: 12px;
+  padding: 18px 16px;
+  text-align: right;
+  overflow: hidden;
+  word-break: break-all;
+}
+
+.display-expression {
+  min-height: 1.2em;
+  font-size: 0.95rem;
+  color: var(--display-sub-color);
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.display-value {
+  font-size: clamp(1.6rem, 8vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.key {
+  border: none;
+  border-radius: 10px;
+  background: var(--key-bg);
+  color: var(--key-color);
+  font-size: 1.15rem;
+  padding: 16px 0;
+  cursor: pointer;
+  transition: background-color 0.1s ease, transform 0.05s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.key:hover {
+  background: var(--key-hover-bg);
+}
+
+.key:active {
+  transform: scale(0.96);
+}
+
+.key-op {
+  background: var(--key-op-bg);
+  color: var(--key-op-color);
+}
+
+.key-op:hover {
+  background: var(--key-op-hover-bg);
+}
+
+.key-op.is-active {
+  outline: 2px solid var(--key-op-color);
+  outline-offset: -4px;
+}
+
+.key-fn {
+  background: var(--key-fn-bg);
+  color: var(--key-fn-color);
+}
+
+.key-fn:hover {
+  background: var(--key-fn-hover-bg);
+}
+
+.key-fn[data-action="clear"] {
+  color: var(--danger-color);
+}
+
+.key-equals {
+  background: var(--key-equals-bg);
+  color: var(--key-equals-color);
+}
+
+.key-equals:hover {
+  background: var(--key-equals-hover-bg);
+}
+
+.key-zero {
+  grid-column: span 1;
+}
+
+.app-footer {
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+  color: var(--hint-color);
+  font-size: 0.78rem;
+}
+
+@media (max-width: 360px) {
+  .key {
+    padding: 14px 0;
+    font-size: 1.05rem;
+  }
+}

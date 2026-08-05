@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>픽셀 아트 에디터</title>
+<link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1 class="title">픽셀 아트 에디터</h1>
+      <button type="button" class="icon-button" id="theme-toggle" aria-label="다크 모드 전환" title="다크 모드 전환">
+        <span class="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+    </header>
+
+    <p class="hint">마우스 드래그(모바일은 터치 드래그)로 16×16 격자에 도트를 찍어보세요. 색을 고르고, 지우개로 지우고, 완성하면 PNG로 저장할 수 있어요.</p>
+
+    <main class="editor">
+      <div class="canvas-wrapper">
+        <canvas id="pixel-canvas" class="pixel-canvas" width="384" height="384" aria-label="16×16 픽셀 아트 캔버스"></canvas>
+      </div>
+
+      <aside class="panel">
+        <section class="panel-section">
+          <h2 class="panel-title">색상</h2>
+          <div class="palette-grid" id="palette-grid"></div>
+          <label class="custom-color-label" for="custom-color">
+            커스텀 색상
+            <input type="color" id="custom-color" value="#ff0000" aria-label="커스텀 색상 선택" />
+          </label>
+        </section>
+
+        <section class="panel-section">
+          <h2 class="panel-title">도구</h2>
+          <div class="tool-group" role="group" aria-label="그리기 도구">
+            <button type="button" class="tool-button is-active" id="tool-pen" data-tool="pen" aria-pressed="true">
+              <span aria-hidden="true">✏️</span> 펜
+            </button>
+            <button type="button" class="tool-button" id="tool-eraser" data-tool="eraser" aria-pressed="false">
+              <span aria-hidden="true">🧹</span> 지우개
+            </button>
+          </div>
+        </section>
+
+        <section class="panel-section panel-actions">
+          <button type="button" class="clear-button" id="clear-button">전체 지우기</button>
+          <button type="button" class="save-button" id="save-button">PNG로 저장</button>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="app-footer">
+      <p>저장 시 16×16 그림을 512×512 픽셀로 선명하게 확대해 다운로드합니다.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>

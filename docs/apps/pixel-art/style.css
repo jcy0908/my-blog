@@ -1,0 +1,369 @@
+/* ===== CSS 변수: 라이트 테마 (기본값) ===== */
+:root {
+  --bg: #faf8f5;
+  --text-color: #3a352f;
+  --text-strong: #24211d;
+  --panel-bg: #ffffff;
+  --border-color: #ddd6cd;
+  --button-bg: #e8e2d8;
+  --button-color: #3a352f;
+  --button-hover-bg: #ddd6cb;
+  --accent-color: #4a6fa5;
+  --danger-bg: #c0553a;
+  --danger-color: #ffffff;
+  --danger-hover-bg: #a8462e;
+  --save-bg: #3f8f5f;
+  --save-color: #ffffff;
+  --save-hover-bg: #347a4f;
+  --hint-color: #726b60;
+  --canvas-border: #bdb4a6;
+  --grid-line: rgba(0, 0, 0, 0.15);
+  --checker-a: #f0ece4;
+  --checker-b: #d8d1c4;
+}
+
+/* ===== 다크 테마: 시스템 설정 자동 감지 ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #171614;
+    --text-color: #e5e1d8;
+    --text-strong: #f5f2ec;
+    --panel-bg: #232019;
+    --border-color: #3a352b;
+    --button-bg: #3a352b;
+    --button-color: #f5f2ec;
+    --button-hover-bg: #48412f;
+    --accent-color: #7ea6da;
+    --danger-bg: #b5533a;
+    --danger-color: #ffffff;
+    --danger-hover-bg: #9c452f;
+    --save-bg: #4aa872;
+    --save-color: #0f1b13;
+    --save-hover-bg: #3d9061;
+    --hint-color: #b3aa9a;
+    --canvas-border: #4a4433;
+    --grid-line: rgba(255, 255, 255, 0.12);
+    --checker-a: #2b2820;
+    --checker-b: #201d17;
+  }
+}
+
+/* ===== 수동 토글: data-theme 속성이 시스템 설정보다 우선 ===== */
+:root[data-theme="light"] {
+  --bg: #faf8f5;
+  --text-color: #3a352f;
+  --text-strong: #24211d;
+  --panel-bg: #ffffff;
+  --border-color: #ddd6cd;
+  --button-bg: #e8e2d8;
+  --button-color: #3a352f;
+  --button-hover-bg: #ddd6cb;
+  --accent-color: #4a6fa5;
+  --danger-bg: #c0553a;
+  --danger-color: #ffffff;
+  --danger-hover-bg: #a8462e;
+  --save-bg: #3f8f5f;
+  --save-color: #ffffff;
+  --save-hover-bg: #347a4f;
+  --hint-color: #726b60;
+  --canvas-border: #bdb4a6;
+  --grid-line: rgba(0, 0, 0, 0.15);
+  --checker-a: #f0ece4;
+  --checker-b: #d8d1c4;
+}
+
+:root[data-theme="dark"] {
+  --bg: #171614;
+  --text-color: #e5e1d8;
+  --text-strong: #f5f2ec;
+  --panel-bg: #232019;
+  --border-color: #3a352b;
+  --button-bg: #3a352b;
+  --button-color: #f5f2ec;
+  --button-hover-bg: #48412f;
+  --accent-color: #7ea6da;
+  --danger-bg: #b5533a;
+  --danger-color: #ffffff;
+  --danger-hover-bg: #9c452f;
+  --save-bg: #4aa872;
+  --save-color: #0f1b13;
+  --save-hover-bg: #3d9061;
+  --hint-color: #b3aa9a;
+  --canvas-border: #4a4433;
+  --grid-line: rgba(255, 255, 255, 0.12);
+  --checker-a: #2b2820;
+  --checker-b: #201d17;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== 헤더 ===== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  font-weight: 700;
+  color: var(--text-strong);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.icon-button {
+  border: none;
+  background: var(--button-bg);
+  color: var(--text-strong);
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-button:hover {
+  background: var(--button-hover-bg);
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--hint-color);
+  line-height: 1.5;
+}
+
+/* ===== 에디터 레이아웃 (모바일 퍼스트: 세로 스택) ===== */
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.canvas-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.pixel-canvas {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  background-color: var(--checker-a);
+  border: 2px solid var(--canvas-border);
+  border-radius: 6px;
+  touch-action: none;
+  user-select: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  cursor: crosshair;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--hint-color);
+}
+
+/* ===== 팔레트 ===== */
+.palette-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.swatch {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 6px;
+  border: 2px solid var(--border-color);
+  cursor: pointer;
+  padding: 0;
+}
+
+.swatch:hover {
+  filter: brightness(1.08);
+}
+
+.swatch.is-selected {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+.custom-color-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+#custom-color {
+  width: 44px;
+  height: 40px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  padding: 2px;
+  background: var(--panel-bg);
+  cursor: pointer;
+}
+
+/* ===== 도구 ===== */
+.tool-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tool-button {
+  flex: 1 1 auto;
+  min-width: 90px;
+  min-height: 44px;
+  border: 2px solid var(--border-color);
+  background: var(--button-bg);
+  color: var(--button-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.tool-button:hover {
+  background: var(--button-hover-bg);
+}
+
+.tool-button.is-active {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-color);
+}
+
+/* ===== 실행 버튼 ===== */
+.panel-actions {
+  flex-direction: column;
+}
+
+.clear-button,
+.save-button {
+  min-height: 44px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.clear-button {
+  background: var(--danger-bg);
+  color: var(--danger-color);
+}
+
+.clear-button:hover {
+  background: var(--danger-hover-bg);
+}
+
+.save-button {
+  background: var(--save-bg);
+  color: var(--save-color);
+}
+
+.save-button:hover {
+  background: var(--save-hover-bg);
+}
+
+/* ===== 푸터 ===== */
+.app-footer {
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--hint-color);
+}
+
+/* ===== 반응형: 넓은 화면 (2단 레이아웃) ===== */
+@media (min-width: 720px) {
+  .editor {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .canvas-wrapper {
+    flex: 0 0 auto;
+  }
+
+  .pixel-canvas {
+    width: 480px;
+  }
+
+  .panel {
+    flex: 0 0 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none !important;
+  }
+}

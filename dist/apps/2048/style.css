@@ -1,0 +1,442 @@
+/* ===== CSS 변수: 라이트 테마 (기본값) ===== */
+:root {
+  --bg: #faf8ef;
+  --text-color: #776e65;
+  --text-strong: #776e65;
+  --header-title: #776e65;
+  --board-bg: #bbada0;
+  --cell-bg: rgba(238, 228, 218, 0.35);
+  --score-box-bg: #bbada0;
+  --score-label-color: #eee4da;
+  --score-value-color: #ffffff;
+  --button-bg: #8f7a66;
+  --button-color: #f9f6f2;
+  --button-hover-bg: #9c8b7a;
+  --overlay-bg: rgba(238, 228, 218, 0.73);
+  --overlay-text: #776e65;
+  --hint-color: #776e65;
+
+  --tile-2-bg: #eee4da;
+  --tile-2-color: #776e65;
+  --tile-4-bg: #ede0c8;
+  --tile-4-color: #776e65;
+  --tile-8-bg: #f2b179;
+  --tile-8-color: #f9f6f2;
+  --tile-16-bg: #f59563;
+  --tile-16-color: #f9f6f2;
+  --tile-32-bg: #f67c5f;
+  --tile-32-color: #f9f6f2;
+  --tile-64-bg: #f65e3b;
+  --tile-64-color: #f9f6f2;
+  --tile-128-bg: #edcf72;
+  --tile-128-color: #f9f6f2;
+  --tile-256-bg: #edcc61;
+  --tile-256-color: #f9f6f2;
+  --tile-512-bg: #edc850;
+  --tile-512-color: #f9f6f2;
+  --tile-1024-bg: #edc53f;
+  --tile-1024-color: #f9f6f2;
+  --tile-2048-bg: #edc22e;
+  --tile-2048-color: #f9f6f2;
+  --tile-super-bg: #3c3a32;
+  --tile-super-color: #f9f6f2;
+
+  --board-padding: 12px;
+  --tile-gap: 10px;
+}
+
+/* ===== 다크 테마: 시스템 설정 자동 감지 ===== */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --text-color: #e8e6e3;
+    --text-strong: #f5f2ee;
+    --header-title: #f5f2ee;
+    --board-bg: #2a2a2a;
+    --cell-bg: rgba(255, 255, 255, 0.06);
+    --score-box-bg: #2a2a2a;
+    --score-label-color: #b8b3ac;
+    --score-value-color: #ffffff;
+    --button-bg: #5c5248;
+    --button-color: #f5f2ee;
+    --button-hover-bg: #6b6058;
+    --overlay-bg: rgba(20, 20, 20, 0.82);
+    --overlay-text: #f5f2ee;
+    --hint-color: #b8b3ac;
+  }
+}
+
+/* ===== 수동 토글: data-theme 속성이 시스템 설정보다 우선 ===== */
+:root[data-theme="light"] {
+  --bg: #faf8ef;
+  --text-color: #776e65;
+  --text-strong: #776e65;
+  --header-title: #776e65;
+  --board-bg: #bbada0;
+  --cell-bg: rgba(238, 228, 218, 0.35);
+  --score-box-bg: #bbada0;
+  --score-label-color: #eee4da;
+  --score-value-color: #ffffff;
+  --button-bg: #8f7a66;
+  --button-color: #f9f6f2;
+  --button-hover-bg: #9c8b7a;
+  --overlay-bg: rgba(238, 228, 218, 0.73);
+  --overlay-text: #776e65;
+  --hint-color: #776e65;
+}
+
+:root[data-theme="dark"] {
+  --bg: #121212;
+  --text-color: #e8e6e3;
+  --text-strong: #f5f2ee;
+  --header-title: #f5f2ee;
+  --board-bg: #2a2a2a;
+  --cell-bg: rgba(255, 255, 255, 0.06);
+  --score-box-bg: #2a2a2a;
+  --score-label-color: #b8b3ac;
+  --score-value-color: #ffffff;
+  --button-bg: #5c5248;
+  --button-color: #f5f2ee;
+  --button-hover-bg: #6b6058;
+  --overlay-bg: rgba(20, 20, 20, 0.82);
+  --overlay-text: #f5f2ee;
+  --hint-color: #b8b3ac;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== 헤더 ===== */
+.app-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: clamp(2rem, 8vw, 2.75rem);
+  font-weight: 700;
+  color: var(--header-title);
+  margin: 0;
+  line-height: 1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoreboard {
+  display: flex;
+  gap: 8px;
+}
+
+.score-box {
+  position: relative;
+  background: var(--score-box-bg);
+  color: var(--score-value-color);
+  border-radius: 6px;
+  padding: 6px 14px;
+  min-width: 64px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--score-label-color);
+}
+
+.score-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.score-delta {
+  position: absolute;
+  top: -4px;
+  right: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #7bc47f;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(0);
+}
+
+.score-delta.show {
+  animation: float-up 0.7s ease-out forwards;
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+}
+
+.icon-button {
+  border: none;
+  background: var(--score-box-bg);
+  color: var(--text-strong);
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon-button:hover {
+  filter: brightness(1.1);
+}
+
+/* ===== 컨트롤 영역 ===== */
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--hint-color);
+  line-height: 1.4;
+  flex: 1 1 240px;
+}
+
+.new-game-button,
+.overlay-button {
+  border: none;
+  background: var(--button-bg);
+  color: var(--button-color);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.new-game-button:hover,
+.overlay-button:hover {
+  background: var(--button-hover-bg);
+}
+
+/* ===== 게임 보드 ===== */
+.board-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.board {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1 / 1;
+  background: var(--board-bg);
+  border-radius: 8px;
+  padding: var(--board-padding);
+  touch-action: none;
+  overscroll-behavior: contain;
+  user-select: none;
+}
+
+.board-grid {
+  position: absolute;
+  inset: var(--board-padding);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: var(--tile-gap);
+}
+
+.cell {
+  background: var(--cell-bg);
+  border-radius: 6px;
+}
+
+.tiles-layer {
+  position: absolute;
+  inset: var(--board-padding);
+  pointer-events: none;
+}
+
+.tile {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: clamp(1rem, 6vw, 2rem);
+  transition: left 0.1s ease-in-out, top 0.1s ease-in-out, transform 0.1s ease-in-out;
+  will-change: left, top, transform;
+}
+
+.tile-spawn {
+  animation: tile-spawn 0.15s ease-in-out;
+}
+
+.tile-merge {
+  animation: tile-merge 0.15s ease-in-out;
+}
+
+@keyframes tile-spawn {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes tile-merge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 값별 타일 색상 (font-size는 자릿수가 커질수록 살짝 축소) */
+.tile[data-value="2"] { background: var(--tile-2-bg); color: var(--tile-2-color); }
+.tile[data-value="4"] { background: var(--tile-4-bg); color: var(--tile-4-color); }
+.tile[data-value="8"] { background: var(--tile-8-bg); color: var(--tile-8-color); }
+.tile[data-value="16"] { background: var(--tile-16-bg); color: var(--tile-16-color); }
+.tile[data-value="32"] { background: var(--tile-32-bg); color: var(--tile-32-color); }
+.tile[data-value="64"] { background: var(--tile-64-bg); color: var(--tile-64-color); }
+.tile[data-value="128"] { background: var(--tile-128-bg); color: var(--tile-128-color); font-size: clamp(0.9rem, 5.4vw, 1.8rem); }
+.tile[data-value="256"] { background: var(--tile-256-bg); color: var(--tile-256-color); font-size: clamp(0.9rem, 5.4vw, 1.8rem); }
+.tile[data-value="512"] { background: var(--tile-512-bg); color: var(--tile-512-color); font-size: clamp(0.9rem, 5.4vw, 1.8rem); }
+.tile[data-value="1024"] { background: var(--tile-1024-bg); color: var(--tile-1024-color); font-size: clamp(0.75rem, 4.6vw, 1.5rem); }
+.tile[data-value="2048"] { background: var(--tile-2048-bg); color: var(--tile-2048-color); font-size: clamp(0.75rem, 4.6vw, 1.5rem); }
+.tile[data-super="true"] { background: var(--tile-super-bg); color: var(--tile-super-color); font-size: clamp(0.7rem, 4.2vw, 1.3rem); }
+
+/* ===== 오버레이 (승리/패배) ===== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-bg);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.overlay-message {
+  margin: 0;
+  font-size: clamp(1.5rem, 8vw, 2.25rem);
+  font-weight: 700;
+  color: var(--overlay-text);
+}
+
+.overlay-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ===== 푸터 ===== */
+.app-footer {
+  text-align: center;
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--hint-color);
+}
+
+/* ===== 반응형: 작은 화면 ===== */
+@media (max-width: 420px) {
+  .app {
+    padding: 14px 10px 28px;
+    gap: 12px;
+  }
+
+  .controls-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .new-game-button {
+    width: 100%;
+  }
+
+  .score-box {
+    min-width: 56px;
+    padding: 5px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .score-delta,
+  body {
+    transition: none !important;
+    animation: none !important;
+  }
+}

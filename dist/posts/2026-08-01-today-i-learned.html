@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>오늘 배운 것</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-title" href="../index.html">My Blog</a>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="theme-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <span class="visually-hidden">테마 전환</span>
+  </button>
+</header>
+<main>
+<article>
+  <header class="post-header">
+    <h1>오늘 배운 것</h1>
+    <p class="post-meta">
+      <time datetime="2026-08-01">2026년 8월 1일</time>
+      <ul class="tag-list"><li class="tag">회고</li><li class="tag">웹개발</li></ul>
+    </p>
+  </header>
+  <div class="post-content">
+<p>클로드 코드와 함께 마크다운을 정적 HTML로 변환하는 블로그를 직접 만들어보면서, HTML·CSS·JavaScript 세 가지가 각각 어떤 역할을 맡는지 다시 한번 명확하게 정리할 수 있었다.</p>
+<h2>HTML: 콘텐츠의 뼈대</h2>
+<p>HTML은 페이지에 어떤 내용이 들어가는지, 그 내용이 어떤 의미를 갖는지를 표현한다. 이번 프로젝트에서는 마크다운을 파싱해 <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;ul&gt;</code>, <code>&lt;pre&gt;&lt;code&gt;</code> 같은 태그로 변환하는 작업이 바로 이 역할이었다. 스타일이나 동작이 하나도 없어도 HTML만으로 글의 구조(제목, 문단, 목록, 인용)는 완전히 전달된다.</p>
+<h2>CSS: 보기 좋게 꾸미기</h2>
+<p>CSS는 같은 HTML을 얼마나 읽기 좋게 보여줄지 결정한다.</p>
+<ul><li>CSS 변수(<code>--color-bg</code>, <code>--color-text</code> 등)로 라이트/다크 테마 색상을 한곳에서 관리했다.</li><li><code>prefers-color-scheme</code>와 <code>data-theme</code> 속성을 조합해 OS 설정과 사용자 수동 선택을 모두 지원했다.</li><li><code>max-width</code>와 <code>clamp()</code>만으로도 미디어쿼리 없이 꽤 괜찮은 반응형 레이아웃을 만들 수 있었다.</li></ul>
+<p>즉, CSS는 콘텐츠는 그대로 두고 "어떻게 보일지"만 담당한다.</p>
+<h2>JavaScript: 상호작용 더하기</h2>
+<p>JavaScript는 정적인 페이지에 동작을 붙인다. 이번 블로그에서는 다크모드 토글 버튼 하나가 전부였지만, 그 안에도 다음 역할이 들어있었다.</p>
+<pre><code class="language-js">btn.addEventListener('click', () =&gt; {
+  const next = getEffectiveTheme() === 'dark' ? 'light' : 'dark';
+  root.dataset.theme = next;
+  localStorage.setItem('theme', next);
+});</code></pre>
+<p>클릭 이벤트를 감지하고, 상태(테마)를 바꾸고, 그 상태를 <code>localStorage</code>에 저장해 다음 방문에도 기억하게 만드는 것. 이 세 가지가 JavaScript가 하는 일이었다.</p>
+<h2>정리</h2>
+<p>결국 HTML은 "무엇을", CSS는 "어떻게 보이게", JavaScript는 "어떻게 반응하게" 만들지를 담당한다는 걸 프레임워크 없이 직접 구현해보니 훨씬 몸으로 느껴졌다.</p>
+  </div>
+</article>
+<p class="post-nav"><a href="../index.html">← 목록으로</a></p>
+</main>
+<footer class="site-footer">
+  <p>&copy; 2026 My Blog</p>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

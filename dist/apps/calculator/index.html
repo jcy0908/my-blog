@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>사칙연산 계산기</title>
+<link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1 class="title">계산기</h1>
+      <button type="button" class="icon-button" id="theme-toggle" aria-label="다크 모드 전환" title="다크 모드 전환">
+        <span class="theme-icon" aria-hidden="true">🌙</span>
+      </button>
+    </header>
+
+    <p class="hint">더하기, 빼기, 곱하기, 나누기를 지원하는 간단한 계산기입니다.</p>
+
+    <main class="calculator">
+      <div class="display" id="display" aria-live="polite">
+        <div class="display-expression" id="display-expression"></div>
+        <div class="display-value" id="display-value">0</div>
+      </div>
+
+      <div class="keypad" role="group" aria-label="계산기 키패드">
+        <button type="button" class="key key-fn" data-action="clear">C</button>
+        <button type="button" class="key key-fn" data-action="backspace">⌫</button>
+        <button type="button" class="key key-fn" data-action="percent">%</button>
+        <button type="button" class="key key-op" data-op="÷">÷</button>
+
+        <button type="button" class="key key-num" data-num="7">7</button>
+        <button type="button" class="key key-num" data-num="8">8</button>
+        <button type="button" class="key key-num" data-num="9">9</button>
+        <button type="button" class="key key-op" data-op="×">×</button>
+
+        <button type="button" class="key key-num" data-num="4">4</button>
+        <button type="button" class="key key-num" data-num="5">5</button>
+        <button type="button" class="key key-num" data-num="6">6</button>
+        <button type="button" class="key key-op" data-op="-">−</button>
+
+        <button type="button" class="key key-num" data-num="1">1</button>
+        <button type="button" class="key key-num" data-num="2">2</button>
+        <button type="button" class="key key-num" data-num="3">3</button>
+        <button type="button" class="key key-op" data-op="+">+</button>
+
+        <button type="button" class="key key-num key-zero" data-num="0">0</button>
+        <button type="button" class="key key-num" data-action="decimal">.</button>
+        <button type="button" class="key key-equals" data-action="equals">=</button>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <p>키보드 입력(숫자, +, -, *, /, Enter, Backspace, Escape)도 지원합니다.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="./script.js"></script>
+</body>
+</html>
