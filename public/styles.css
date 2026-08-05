@@ -1,98 +1,125 @@
-:root {
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b6b6b;
-  --color-link: #1d6fdb;
-  --color-link-hover: #164f9e;
-  --color-border: #e3e3e3;
-  --color-code-bg: #f4f4f5;
-  --color-surface: #f9f9fa;
+/* ==========================================================================
+   감도 感度 — 디자인 시스템
+   벤치마크: Apple(여백·대형 타이포), 2000년대 Sony(무채색 위 비비드 액센트),
+   Toss(정돈된 한국어 UI, 명확한 위계)
+   원칙: 무채색이 바탕, 비비드는 단 한 색. 장식 대신 여백.
+   ========================================================================== */
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+:root {
+  --c-bg: #ffffff;
+  --c-surface: #f5f5f7;
+  --c-text: #0b0b0c;
+  --c-muted: #86868b;
+  --c-hairline: #e8e8ed;
+  --c-accent: #ff4e00;
+  --c-accent-hover: #d94200;
+  --c-code-bg: #f5f5f7;
+
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
-  --content-width: 70ch;
-  --leading-relaxed: 1.7;
+  --w-text: 42rem;
+  --w-wide: 62rem;
 
   --space-1: 0.5rem;
   --space-2: 1rem;
   --space-3: 1.5rem;
-  --space-4: 2rem;
-  --space-5: 3rem;
-  --space-6: 4rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --space-6: 6.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #14161a;
-    --color-text: #e8e8ea;
-    --color-text-muted: #9a9ba3;
-    --color-link: #6ea8fe;
-    --color-link-hover: #9cc2ff;
-    --color-border: #2b2e34;
-    --color-code-bg: #1d2025;
-    --color-surface: #191b20;
+    --c-bg: #0d0d0f;
+    --c-surface: #161619;
+    --c-text: #f5f5f7;
+    --c-muted: #98989f;
+    --c-hairline: #26262b;
+    --c-accent: #ff5c1a;
+    --c-accent-hover: #ff7a42;
+    --c-code-bg: #161619;
   }
 }
 
 :root[data-theme="dark"] {
-  --color-bg: #14161a;
-  --color-text: #e8e8ea;
-  --color-text-muted: #9a9ba3;
-  --color-link: #6ea8fe;
-  --color-link-hover: #9cc2ff;
-  --color-border: #2b2e34;
-  --color-code-bg: #1d2025;
-  --color-surface: #191b20;
+  --c-bg: #0d0d0f;
+  --c-surface: #161619;
+  --c-text: #f5f5f7;
+  --c-muted: #98989f;
+  --c-hairline: #26262b;
+  --c-accent: #ff5c1a;
+  --c-accent-hover: #ff7a42;
+  --c-code-bg: #161619;
 }
 
 :root[data-theme="light"] {
-  --color-bg: #ffffff;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b6b6b;
-  --color-link: #1d6fdb;
-  --color-link-hover: #164f9e;
-  --color-border: #e3e3e3;
-  --color-code-bg: #f4f4f5;
-  --color-surface: #f9f9fa;
+  --c-bg: #ffffff;
+  --c-surface: #f5f5f7;
+  --c-text: #0b0b0c;
+  --c-muted: #86868b;
+  --c-hairline: #e8e8ed;
+  --c-accent: #ff4e00;
+  --c-accent-hover: #d94200;
+  --c-code-bg: #f5f5f7;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: var(--font-sans);
-  line-height: var(--leading-relaxed);
-  background: var(--color-bg);
-  color: var(--color-text);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  background: var(--c-bg);
+  color: var(--c-text);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-.site-header,
-main,
-.site-footer {
-  max-width: var(--content-width);
-  margin-inline: auto;
-  padding-inline: var(--space-2);
+::selection {
+  background: var(--c-accent);
+  color: #fff;
 }
+
+/* ==========================================================================
+   헤더 — 스티키 + 블러 (Apple)
+   ========================================================================== */
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
-  padding-block: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  padding: 0.85rem clamp(1rem, 4vw, 2rem);
+  background: color-mix(in srgb, var(--c-bg) 82%, transparent);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--c-hairline);
 }
 
 .site-title {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: var(--color-text);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: var(--c-text);
   text-decoration: none;
+}
+
+.site-title .hanja {
+  margin-left: 0.35em;
+  font-weight: 400;
+  color: var(--c-muted);
 }
 
 .theme-toggle {
@@ -104,15 +131,15 @@ main,
   border: none;
   border-radius: 999px;
   background: transparent;
-  color: var(--color-text-muted);
+  color: var(--c-muted);
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
-  background: var(--color-surface);
-  color: var(--color-text);
+  background: var(--c-surface);
+  color: var(--c-text);
 }
 
 .theme-toggle-icon {
@@ -131,17 +158,201 @@ main,
   border: 0;
 }
 
+/* ==========================================================================
+   레이아웃
+   ========================================================================== */
+
 main {
-  padding-block: var(--space-4);
+  max-width: var(--w-wide);
+  margin-inline: auto;
+  padding: 0 clamp(1rem, 4vw, 2rem) var(--space-6);
   min-height: 60vh;
 }
 
 .site-footer {
-  padding-block: var(--space-4);
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  border-top: 1px solid var(--color-border);
+  max-width: var(--w-wide);
+  margin-inline: auto;
+  padding: var(--space-4) clamp(1rem, 4vw, 2rem);
+  color: var(--c-muted);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--c-hairline);
 }
+
+/* ==========================================================================
+   히어로 — 큰 활자, 큰 여백 (Apple), 액센트는 한 단어 (Sony)
+   ========================================================================== */
+
+.hero {
+  padding: var(--space-6) 0 var(--space-5);
+}
+
+.hero-eyebrow {
+  margin: 0 0 var(--space-3);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.hero h1 {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(2.4rem, 7vw, 4.4rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.hero .accent {
+  color: var(--c-accent);
+}
+
+.hero-sub {
+  margin: 0;
+  max-width: 36ch;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.75;
+  color: var(--c-muted);
+}
+
+/* ==========================================================================
+   섹션 라벨 — 소니 카탈로그의 기술 라벨 감각
+   ========================================================================== */
+
+.section {
+  margin-top: var(--space-6);
+}
+
+.section-label {
+  margin: 0 0 var(--space-1);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.section-title {
+  margin: 0 0 var(--space-4);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+/* ==========================================================================
+   포스트 리스트 — 번호가 붙은 카탈로그 (Sony), 넉넉한 행간 (Toss)
+   ========================================================================== */
+
+.post-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--c-hairline);
+}
+
+.post-list-item {
+  border-bottom: 1px solid var(--c-hairline);
+}
+
+.post-list-item a {
+  display: grid;
+  grid-template-columns: 3.2rem 1fr auto;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 1.35rem 0.25rem;
+  text-decoration: none;
+  color: var(--c-text);
+  transition: color 0.15s ease;
+}
+
+.post-index {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--c-muted);
+  letter-spacing: 0.06em;
+}
+
+.post-title {
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.4;
+}
+
+.post-list-item a:hover .post-title,
+.post-list-item a:focus-visible .post-title {
+  color: var(--c-accent);
+}
+
+.post-list-item time {
+  color: var(--c-muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   앱 카드 — 둥근 모서리, 들어올리는 호버 (Toss)
+   ========================================================================== */
+
+.app-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-3);
+}
+
+.app-card {
+  border: 1px solid var(--c-hairline);
+  border-radius: 20px;
+  padding: var(--space-2);
+  background: var(--c-surface);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.app-card h3 {
+  margin: var(--space-2) 0 0.25rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.app-card h3 a {
+  color: var(--c-text);
+  text-decoration: none;
+}
+
+.app-card h3 a:hover {
+  color: var(--c-accent);
+}
+
+.app-card p {
+  margin: 0;
+  color: var(--c-muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.app-preview {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--c-hairline);
+  border-radius: 12px;
+  background: var(--c-bg);
+}
+
+/* ==========================================================================
+   본문 타이포그래피
+   ========================================================================== */
 
 h1,
 h2,
@@ -149,22 +360,10 @@ h3,
 h4,
 h5,
 h6 {
-  line-height: 1.3;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   margin-top: var(--space-5);
   margin-bottom: var(--space-2);
-}
-
-h1 {
-  font-size: clamp(1.75rem, 4vw + 1rem, 2.5rem);
-  margin-top: 0;
-}
-
-h2 {
-  font-size: clamp(1.4rem, 3vw + 1rem, 1.9rem);
-}
-
-h3 {
-  font-size: clamp(1.15rem, 2vw + 1rem, 1.4rem);
 }
 
 p {
@@ -172,30 +371,32 @@ p {
 }
 
 a {
-  color: var(--color-link);
+  color: var(--c-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 
 a:hover {
-  color: var(--color-link-hover);
+  color: var(--c-accent-hover);
 }
 
 img {
   max-width: 100%;
   height: auto;
-  border-radius: 6px;
+  border-radius: 12px;
 }
 
 hr {
   border: none;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--c-hairline);
   margin: var(--space-4) 0;
 }
 
 blockquote {
   margin: var(--space-3) 0;
   padding-left: var(--space-2);
-  border-left: 3px solid var(--color-border);
-  color: var(--color-text-muted);
+  border-left: 3px solid var(--c-accent);
+  color: var(--c-muted);
 }
 
 blockquote p:last-child {
@@ -213,16 +414,17 @@ li {
 
 code {
   font-family: var(--font-mono);
-  font-size: 0.9em;
-  background: var(--color-code-bg);
+  font-size: 0.88em;
+  background: var(--c-code-bg);
   padding: 0.15em 0.4em;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 pre {
-  background: var(--color-code-bg);
+  background: var(--c-code-bg);
+  border: 1px solid var(--c-hairline);
   padding: var(--space-2);
-  border-radius: 8px;
+  border-radius: 14px;
   overflow-x: auto;
 }
 
@@ -232,40 +434,26 @@ pre code {
   font-size: 0.85em;
 }
 
-/* Post list */
-.post-list {
-  list-style: none;
-  padding: 0;
+/* ==========================================================================
+   포스트 페이지
+   ========================================================================== */
+
+.post-page {
+  max-width: var(--w-text);
+  margin-inline: auto;
 }
 
-.post-list-item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-1);
-  padding-block: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.post-list-item a {
-  font-size: 1.05rem;
-  text-decoration: none;
-}
-
-.post-list-item a:hover {
-  text-decoration: underline;
-}
-
-.post-list-item time {
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-/* Post page */
 .post-header {
+  padding-top: var(--space-5);
   margin-bottom: var(--space-4);
+}
+
+.post-header h1 {
+  margin: 0 0 var(--space-2);
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
 }
 
 .post-meta {
@@ -273,8 +461,9 @@ pre code {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
-  color: var(--color-text-muted);
-  font-size: 0.9rem;
+  margin: 0;
+  color: var(--c-muted);
+  font-size: 0.88rem;
 }
 
 .tag-list {
@@ -287,74 +476,60 @@ pre code {
 }
 
 .tag {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
   border-radius: 999px;
-  padding: 0.1rem 0.6rem;
-  font-size: 0.8rem;
+  padding: 0.1rem 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.post-content {
+  font-size: 1.0625rem;
 }
 
 .post-nav {
-  margin-top: var(--space-5);
+  max-width: var(--w-text);
+  margin: var(--space-5) auto 0;
 }
 
-/* App cards */
-.app-list {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--space-3);
-}
-
-.app-card {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: var(--space-2);
-  background: var(--color-surface);
-}
-
-.app-card h3 {
-  margin-top: var(--space-2);
-  margin-bottom: 0.25rem;
-  font-size: 1.05rem;
-}
-
-.app-card h3 a {
-  text-decoration: none;
-}
-
-.app-card h3 a:hover {
-  text-decoration: underline;
-}
-
-.app-card p {
-  margin-bottom: 0;
-  color: var(--color-text-muted);
+.post-nav a {
+  display: inline-block;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  background: var(--c-surface);
+  border: 1px solid var(--c-hairline);
+  color: var(--c-text);
+  font-weight: 600;
   font-size: 0.9rem;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.app-preview {
-  display: block;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  background: var(--color-bg);
+.post-nav a:hover {
+  background: var(--c-text);
+  color: var(--c-bg);
 }
 
-@media (max-width: 480px) {
-  .site-header {
-    padding-block: var(--space-2);
+/* ==========================================================================
+   반응형
+   ========================================================================== */
+
+@media (max-width: 560px) {
+  .post-list-item a {
+    grid-template-columns: 2.4rem 1fr;
   }
 
-  .post-list-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
+  .post-list-item time {
+    grid-column: 2;
+    margin-top: 0.1rem;
   }
 
   .app-list {
     grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: var(--space-5);
   }
 }

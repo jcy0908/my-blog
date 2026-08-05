@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Blog</title>
+<title>감도 感度 — 감각의 해상도를 높이는 연습</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="./styles.css">
 <script>
 (function () {
@@ -18,7 +19,7 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="site-title" href="./index.html">My Blog</a>
+  <a class="site-title" href="./index.html">감도 <span class="hanja">感度</span></a>
   <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
     <svg class="theme-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -27,38 +28,76 @@
   </button>
 </header>
 <main>
-<h1>Posts</h1>
+<section class="hero">
+<p class="hero-eyebrow">Studies in Sensibility</p>
+<h1>감각의 <span class="accent">해상도</span>를<br>높이는 연습.</h1>
+<p class="hero-sub">교토의 정원에서 토스의 화면까지. 좋았던 것들이 왜 좋았는지, 그 이유를 언어로 만들어 보는 기록입니다.</p>
+</section>
+<section class="section">
+<p class="section-label">Essays</p>
+<h2 class="section-title">글</h2>
 <ul class="post-list">
   <li class="post-list-item">
-    <a href="./posts/2026-08-05-event-loop.html">자바스크립트 이벤트 루프, 마이크로태스크와 매크로태스크</a>
-    <time datetime="2026-08-05">2026년 8월 5일</time>
+    <a href="./posts/2026-08-05-kyoto-garden.html">
+      <span class="post-index">01</span>
+      <span class="post-title">교토의 정원은 왜 비어 있는가</span>
+      <time datetime="2026-08-05">2026년 8월 5일</time>
+    </a>
   </li>
   <li class="post-list-item">
-    <a href="./posts/2026-08-04-css-specificity.html">CSS 명시도는 어떻게 계산될까</a>
-    <time datetime="2026-08-04">2026년 8월 4일</time>
+    <a href="./posts/2026-08-04-margiela.html">
+      <span class="post-index">02</span>
+      <span class="post-title">마르지엘라, 안감을 밖으로</span>
+      <time datetime="2026-08-04">2026년 8월 4일</time>
+    </a>
   </li>
   <li class="post-list-item">
-    <a href="./posts/2026-08-03-git-rebase-vs-merge.html">Git rebase와 merge, 언제 무엇을 써야 할까</a>
-    <time datetime="2026-08-03">2026년 8월 3일</time>
+    <a href="./posts/2026-08-03-issey-miyake.html">
+      <span class="post-index">03</span>
+      <span class="post-title">이세이 미야케의 주름은 장식이 아니다</span>
+      <time datetime="2026-08-03">2026년 8월 3일</time>
+    </a>
   </li>
   <li class="post-list-item">
-    <a href="./posts/2026-08-02-event-delegation.html">이벤트 위임으로 리스너 줄이기</a>
-    <time datetime="2026-08-02">2026년 8월 2일</time>
+    <a href="./posts/2026-08-02-bang-olufsen.html">
+      <span class="post-index">04</span>
+      <span class="post-title">뱅앤올룹슨과 알루미늄의 온도</span>
+      <time datetime="2026-08-02">2026년 8월 2일</time>
+    </a>
   </li>
   <li class="post-list-item">
-    <a href="./posts/2026-08-01-example-post.html">마크다운 블로그에 오신 것을 환영합니다</a>
-    <time datetime="2026-08-01">2026년 8월 1일</time>
+    <a href="./posts/2026-08-01-sony-2000s.html">
+      <span class="post-index">05</span>
+      <span class="post-title">2000년대 소니, 비비드와 무채색 사이</span>
+      <time datetime="2026-08-01">2026년 8월 1일</time>
+    </a>
   </li>
   <li class="post-list-item">
-    <a href="./posts/2026-08-01-today-i-learned.html">오늘 배운 것</a>
-    <time datetime="2026-08-01">2026년 8월 1일</time>
+    <a href="./posts/2026-07-30-toss-screen.html">
+      <span class="post-index">06</span>
+      <span class="post-title">토스 화면은 왜 편안한가</span>
+      <time datetime="2026-07-30">2026년 7월 30일</time>
+    </a>
   </li>
   <li class="post-list-item">
-    <a href="./posts/2026-07-15-second-post.html">두 번째 포스트</a>
-    <time datetime="2026-07-15">2026년 7월 15일</time>
+    <a href="./posts/2026-07-28-ando-tadao.html">
+      <span class="post-index">07</span>
+      <span class="post-title">안도 다다오의 뮤지엄 산에서</span>
+      <time datetime="2026-07-28">2026년 7월 28일</time>
+    </a>
+  </li>
+  <li class="post-list-item">
+    <a href="./posts/2026-07-26-quiet-clothes.html">
+      <span class="post-index">08</span>
+      <span class="post-title">르메르와 COS, 조용한 옷의 문법</span>
+      <time datetime="2026-07-26">2026년 7월 26일</time>
+    </a>
   </li>
 </ul>
-<h2>Mini Apps</h2>
+</section>
+<section class="section">
+<p class="section-label">Playground</p>
+<h2 class="section-title">미니 앱</h2>
 <ul class="app-list">
   <li class="app-card">
     <iframe class="app-preview" src="./apps/2048/index.html" title="2048 미리보기" loading="lazy" sandbox="allow-scripts"></iframe>
@@ -76,9 +115,10 @@
     <p>사칙연산과 퍼센트 계산을 지원하는 간단한 계산기. 키보드 입력과 다크모드를 지원합니다.</p>
   </li>
 </ul>
+</section>
 </main>
 <footer class="site-footer">
-  <p>&copy; 2026 My Blog</p>
+  <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
 </footer>
 <script type="module" src="./theme.js"></script>
 </body>

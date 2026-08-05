@@ -1,44 +1,44 @@
 /* ===== CSS 변수: 라이트 테마 (기본값) ===== */
 :root {
-  --bg: #faf8ef;
-  --text-color: #776e65;
-  --text-strong: #776e65;
-  --header-title: #776e65;
-  --board-bg: #bbada0;
-  --cell-bg: rgba(238, 228, 218, 0.35);
-  --score-box-bg: #bbada0;
-  --score-label-color: #eee4da;
+  --bg: #f5f5f7;
+  --text-color: #0b0b0c;
+  --text-strong: #0b0b0c;
+  --header-title: #0b0b0c;
+  --board-bg: #e3e3e9;
+  --cell-bg: rgba(0, 0, 0, 0.05);
+  --score-box-bg: #0b0b0c;
+  --score-label-color: #98989f;
   --score-value-color: #ffffff;
-  --button-bg: #8f7a66;
-  --button-color: #f9f6f2;
-  --button-hover-bg: #9c8b7a;
-  --overlay-bg: rgba(238, 228, 218, 0.73);
-  --overlay-text: #776e65;
-  --hint-color: #776e65;
+  --button-bg: #0b0b0c;
+  --button-color: #ffffff;
+  --button-hover-bg: #2c2c33;
+  --overlay-bg: rgba(245, 245, 247, 0.82);
+  --overlay-text: #0b0b0c;
+  --hint-color: #86868b;
 
-  --tile-2-bg: #eee4da;
-  --tile-2-color: #776e65;
-  --tile-4-bg: #ede0c8;
-  --tile-4-color: #776e65;
-  --tile-8-bg: #f2b179;
+  --tile-2-bg: #ffffff;
+  --tile-2-color: #48484f;
+  --tile-4-bg: #e3e3e9;
+  --tile-4-color: #48484f;
+  --tile-8-bg: #a8a8b2;
   --tile-8-color: #f9f6f2;
-  --tile-16-bg: #f59563;
+  --tile-16-bg: #7b7b86;
   --tile-16-color: #f9f6f2;
-  --tile-32-bg: #f67c5f;
+  --tile-32-bg: #55555f;
   --tile-32-color: #f9f6f2;
-  --tile-64-bg: #f65e3b;
+  --tile-64-bg: #2c2c33;
   --tile-64-color: #f9f6f2;
-  --tile-128-bg: #edcf72;
+  --tile-128-bg: #ff9a66;
   --tile-128-color: #f9f6f2;
-  --tile-256-bg: #edcc61;
+  --tile-256-bg: #ff8547;
   --tile-256-color: #f9f6f2;
-  --tile-512-bg: #edc850;
+  --tile-512-bg: #ff6f29;
   --tile-512-color: #f9f6f2;
-  --tile-1024-bg: #edc53f;
+  --tile-1024-bg: #ff5c14;
   --tile-1024-color: #f9f6f2;
-  --tile-2048-bg: #edc22e;
+  --tile-2048-bg: #ff4e00;
   --tile-2048-color: #f9f6f2;
-  --tile-super-bg: #3c3a32;
+  --tile-super-bg: #0b0b0c;
   --tile-super-color: #f9f6f2;
 
   --board-padding: 12px;
@@ -48,59 +48,59 @@
 /* ===== 다크 테마: 시스템 설정 자동 감지 ===== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #121212;
-    --text-color: #e8e6e3;
-    --text-strong: #f5f2ee;
-    --header-title: #f5f2ee;
-    --board-bg: #2a2a2a;
+    --bg: #0d0d0f;
+    --text-color: #f5f5f7;
+    --text-strong: #ffffff;
+    --header-title: #ffffff;
+    --board-bg: #1d1d21;
     --cell-bg: rgba(255, 255, 255, 0.06);
-    --score-box-bg: #2a2a2a;
-    --score-label-color: #b8b3ac;
+    --score-box-bg: #1d1d21;
+    --score-label-color: #98989f;
     --score-value-color: #ffffff;
-    --button-bg: #5c5248;
-    --button-color: #f5f2ee;
-    --button-hover-bg: #6b6058;
+    --button-bg: #f5f5f7;
+    --button-color: #0b0b0c;
+    --button-hover-bg: #d8d8de;
     --overlay-bg: rgba(20, 20, 20, 0.82);
-    --overlay-text: #f5f2ee;
-    --hint-color: #b8b3ac;
+    --overlay-text: #f5f5f7;
+    --hint-color: #98989f;
   }
 }
 
 /* ===== 수동 토글: data-theme 속성이 시스템 설정보다 우선 ===== */
 :root[data-theme="light"] {
-  --bg: #faf8ef;
-  --text-color: #776e65;
-  --text-strong: #776e65;
-  --header-title: #776e65;
-  --board-bg: #bbada0;
-  --cell-bg: rgba(238, 228, 218, 0.35);
-  --score-box-bg: #bbada0;
-  --score-label-color: #eee4da;
+  --bg: #f5f5f7;
+  --text-color: #0b0b0c;
+  --text-strong: #0b0b0c;
+  --header-title: #0b0b0c;
+  --board-bg: #e3e3e9;
+  --cell-bg: rgba(0, 0, 0, 0.05);
+  --score-box-bg: #0b0b0c;
+  --score-label-color: #98989f;
   --score-value-color: #ffffff;
-  --button-bg: #8f7a66;
-  --button-color: #f9f6f2;
-  --button-hover-bg: #9c8b7a;
-  --overlay-bg: rgba(238, 228, 218, 0.73);
-  --overlay-text: #776e65;
-  --hint-color: #776e65;
+  --button-bg: #0b0b0c;
+  --button-color: #ffffff;
+  --button-hover-bg: #2c2c33;
+  --overlay-bg: rgba(245, 245, 247, 0.82);
+  --overlay-text: #0b0b0c;
+  --hint-color: #86868b;
 }
 
 :root[data-theme="dark"] {
-  --bg: #121212;
-  --text-color: #e8e6e3;
-  --text-strong: #f5f2ee;
-  --header-title: #f5f2ee;
-  --board-bg: #2a2a2a;
+  --bg: #0d0d0f;
+  --text-color: #f5f5f7;
+  --text-strong: #ffffff;
+  --header-title: #ffffff;
+  --board-bg: #1d1d21;
   --cell-bg: rgba(255, 255, 255, 0.06);
-  --score-box-bg: #2a2a2a;
-  --score-label-color: #b8b3ac;
+  --score-box-bg: #1d1d21;
+  --score-label-color: #98989f;
   --score-value-color: #ffffff;
-  --button-bg: #5c5248;
-  --button-color: #f5f2ee;
-  --button-hover-bg: #6b6058;
+  --button-bg: #f5f5f7;
+  --button-color: #0b0b0c;
+  --button-hover-bg: #d8d8de;
   --overlay-bg: rgba(20, 20, 20, 0.82);
-  --overlay-text: #f5f2ee;
-  --hint-color: #b8b3ac;
+  --overlay-text: #f5f5f7;
+  --hint-color: #98989f;
 }
 
 * {

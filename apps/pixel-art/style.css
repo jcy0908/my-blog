@@ -1,98 +1,98 @@
 /* ===== CSS 변수: 라이트 테마 (기본값) ===== */
 :root {
-  --bg: #faf8f5;
-  --text-color: #3a352f;
-  --text-strong: #24211d;
+  --bg: #f5f5f7;
+  --text-color: #0b0b0c;
+  --text-strong: #0b0b0c;
   --panel-bg: #ffffff;
-  --border-color: #ddd6cd;
-  --button-bg: #e8e2d8;
-  --button-color: #3a352f;
-  --button-hover-bg: #ddd6cb;
-  --accent-color: #4a6fa5;
-  --danger-bg: #c0553a;
+  --border-color: #e3e3e9;
+  --button-bg: #ececf0;
+  --button-color: #0b0b0c;
+  --button-hover-bg: #dfdfe5;
+  --accent-color: #ff4e00;
+  --danger-bg: #e5484d;
   --danger-color: #ffffff;
-  --danger-hover-bg: #a8462e;
-  --save-bg: #3f8f5f;
+  --danger-hover-bg: #d13438;
+  --save-bg: #0b0b0c;
   --save-color: #ffffff;
-  --save-hover-bg: #347a4f;
-  --hint-color: #726b60;
-  --canvas-border: #bdb4a6;
+  --save-hover-bg: #2c2c33;
+  --hint-color: #86868b;
+  --canvas-border: #c9c9d1;
   --grid-line: rgba(0, 0, 0, 0.15);
-  --checker-a: #f0ece4;
-  --checker-b: #d8d1c4;
+  --checker-a: #f0f0f3;
+  --checker-b: #dcdce2;
 }
 
 /* ===== 다크 테마: 시스템 설정 자동 감지 ===== */
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #171614;
-    --text-color: #e5e1d8;
-    --text-strong: #f5f2ec;
-    --panel-bg: #232019;
-    --border-color: #3a352b;
-    --button-bg: #3a352b;
-    --button-color: #f5f2ec;
-    --button-hover-bg: #48412f;
-    --accent-color: #7ea6da;
-    --danger-bg: #b5533a;
+    --bg: #0d0d0f;
+    --text-color: #f5f5f7;
+    --text-strong: #ffffff;
+    --panel-bg: #161619;
+    --border-color: #26262b;
+    --button-bg: #2e2e34;
+    --button-color: #f5f5f7;
+    --button-hover-bg: #3a3a41;
+    --accent-color: #ff5c1a;
+    --danger-bg: #d13438;
     --danger-color: #ffffff;
-    --danger-hover-bg: #9c452f;
-    --save-bg: #4aa872;
-    --save-color: #0f1b13;
-    --save-hover-bg: #3d9061;
-    --hint-color: #b3aa9a;
-    --canvas-border: #4a4433;
+    --danger-hover-bg: #b02a2e;
+    --save-bg: #f5f5f7;
+    --save-color: #0b0b0c;
+    --save-hover-bg: #d8d8de;
+    --hint-color: #98989f;
+    --canvas-border: #3a3a41;
     --grid-line: rgba(255, 255, 255, 0.12);
-    --checker-a: #2b2820;
-    --checker-b: #201d17;
+    --checker-a: #232328;
+    --checker-b: #1a1a1e;
   }
 }
 
 /* ===== 수동 토글: data-theme 속성이 시스템 설정보다 우선 ===== */
 :root[data-theme="light"] {
-  --bg: #faf8f5;
-  --text-color: #3a352f;
-  --text-strong: #24211d;
+  --bg: #f5f5f7;
+  --text-color: #0b0b0c;
+  --text-strong: #0b0b0c;
   --panel-bg: #ffffff;
-  --border-color: #ddd6cd;
-  --button-bg: #e8e2d8;
-  --button-color: #3a352f;
-  --button-hover-bg: #ddd6cb;
-  --accent-color: #4a6fa5;
-  --danger-bg: #c0553a;
+  --border-color: #e3e3e9;
+  --button-bg: #ececf0;
+  --button-color: #0b0b0c;
+  --button-hover-bg: #dfdfe5;
+  --accent-color: #ff4e00;
+  --danger-bg: #e5484d;
   --danger-color: #ffffff;
-  --danger-hover-bg: #a8462e;
-  --save-bg: #3f8f5f;
+  --danger-hover-bg: #d13438;
+  --save-bg: #0b0b0c;
   --save-color: #ffffff;
-  --save-hover-bg: #347a4f;
-  --hint-color: #726b60;
-  --canvas-border: #bdb4a6;
+  --save-hover-bg: #2c2c33;
+  --hint-color: #86868b;
+  --canvas-border: #c9c9d1;
   --grid-line: rgba(0, 0, 0, 0.15);
-  --checker-a: #f0ece4;
-  --checker-b: #d8d1c4;
+  --checker-a: #f0f0f3;
+  --checker-b: #dcdce2;
 }
 
 :root[data-theme="dark"] {
-  --bg: #171614;
-  --text-color: #e5e1d8;
-  --text-strong: #f5f2ec;
-  --panel-bg: #232019;
-  --border-color: #3a352b;
-  --button-bg: #3a352b;
-  --button-color: #f5f2ec;
-  --button-hover-bg: #48412f;
-  --accent-color: #7ea6da;
-  --danger-bg: #b5533a;
+  --bg: #0d0d0f;
+  --text-color: #f5f5f7;
+  --text-strong: #ffffff;
+  --panel-bg: #161619;
+  --border-color: #26262b;
+  --button-bg: #2e2e34;
+  --button-color: #f5f5f7;
+  --button-hover-bg: #3a3a41;
+  --accent-color: #ff5c1a;
+  --danger-bg: #d13438;
   --danger-color: #ffffff;
-  --danger-hover-bg: #9c452f;
-  --save-bg: #4aa872;
-  --save-color: #0f1b13;
-  --save-hover-bg: #3d9061;
-  --hint-color: #b3aa9a;
-  --canvas-border: #4a4433;
+  --danger-hover-bg: #b02a2e;
+  --save-bg: #f5f5f7;
+  --save-color: #0b0b0c;
+  --save-hover-bg: #d8d8de;
+  --hint-color: #98989f;
+  --canvas-border: #3a3a41;
   --grid-line: rgba(255, 255, 255, 0.12);
-  --checker-a: #2b2820;
-  --checker-b: #201d17;
+  --checker-a: #232328;
+  --checker-b: #1a1a1e;
 }
 
 * {

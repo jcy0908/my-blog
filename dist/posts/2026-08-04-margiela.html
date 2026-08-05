@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마르지엘라, 안감을 밖으로 — 감도 感度</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<header class="site-header">
+  <a class="site-title" href="../index.html">감도 <span class="hanja">感度</span></a>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="theme-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <span class="visually-hidden">테마 전환</span>
+  </button>
+</header>
+<main>
+<article class="post-page">
+  <header class="post-header">
+    <h1>마르지엘라, 안감을 밖으로</h1>
+    <p class="post-meta">
+      <time datetime="2026-08-04">2026년 8월 4일</time>
+      <ul class="tag-list"><li class="tag">패션</li><li class="tag">구조</li></ul>
+    </p>
+  </header>
+  <div class="post-content">
+<p>마르지엘라의 옷을 보면 재봉선이 밖에 나와 있다. 안감이 겉감처럼 쓰이고, 시침질 자국이 그대로 남아 있다. 원래는 숨겨야 하는 것들이다.</p>
+<p>처음 봤을 때는 그냥 파격이라고 생각했다. 그런데 오래 보니 파격이 목적이 아니었다. 옷이 어떻게 만들어지는지를 옷 자체가 설명하고 있었다. 구조를 숨기는 대신 구조를 디자인으로 만든 것이다.</p>
+<p>이게 왜 좋았는지 한참 뒤에 알았다. 나는 뭔가를 배울 때 완성품보다 만드는 과정이 보고 싶은 사람이다. 완성된 화면은 감탄만 하게 되는데, 과정이 드러나면 따라 해 볼 수가 있다. 마르지엘라의 옷은 완성품이면서 동시에 제작 설명서다.</p>
+<p>코드를 쓰면서 비슷한 고민을 한다. 웹페이지는 보통 결과만 보여 주고 과정을 숨긴다. 그런데 내 저장소에는 계획서(spec)와 리뷰 기록을 일부러 남겨 둔다. 페이지가 어떻게 이 모양이 됐는지, 어떤 선택지를 버렸는지가 거기 있다. 안감을 밖으로 꺼내 두는 것이다.</p>
+<p>숨겨야 할 것과 보여 줘도 되는 것의 경계는 생각보다 관습일 뿐인지도 모른다. 마르지엘라는 그 관습을 뒤집어서 하나의 언어를 만들었다. 나는 아직 그 언어의 단어 몇 개를 주운 정도다.</p>
+  </div>
+</article>
+<p class="post-nav"><a href="../index.html">← 목록으로</a></p>
+</main>
+<footer class="site-footer">
+  <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>
