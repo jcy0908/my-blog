@@ -1,19 +1,43 @@
 /* ==========================================================================
    감도 感度 — 디자인 시스템
-   벤치마크: Apple(여백·대형 타이포), 2000년대 Sony(무채색 위 비비드 액센트),
-   Toss(정돈된 한국어 UI, 명확한 위계)
-   원칙: 무채색이 바탕, 비비드는 단 한 색. 장식 대신 여백.
+   벤치마크: Apple(여백·대형 타이포), 안도 다다오(빛과 콘크리트),
+   교토 가레산스이(여백), Toss(명료한 위계)
+   원칙: 강원 영서의 겨울에서 채집한 회청색이 바탕, 색은 이끼 하나.
+   재료 하나를 더한다 — 유리. 뒤가 비치되 흐리게.
    ========================================================================== */
 
 :root {
-  --c-bg: #ffffff;
-  --c-surface: #f5f5f7;
-  --c-text: #0b0b0c;
-  --c-muted: #86868b;
-  --c-hairline: #e8e8ed;
-  --c-accent: #ff4e00;
-  --c-accent-hover: #d94200;
-  --c-code-bg: #f5f5f7;
+  /* 영서의 겨울에서 채집한 색 */
+  --winter-haze: #eef1f2;
+  --ice-sheet: #dbe2e4;
+  --mountain-ink: #1c2325;
+  --moss: #4b6560;
+  --stone: #8a9296;
+  --winter-soil: #5d6a6d;
+
+  --c-bg: var(--winter-haze);
+  --c-surface: var(--ice-sheet);
+  --c-text: var(--mountain-ink);
+  --c-muted: var(--stone);
+  --c-hairline: rgba(28, 35, 37, 0.14);
+  --c-hairline-soft: rgba(28, 35, 37, 0.07);
+  --c-accent: var(--moss);
+  --c-accent-hover: #354a46;
+  --c-code-bg: rgba(255, 255, 255, 0.5);
+
+  /* 유리 */
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-bg-strong: rgba(255, 255, 255, 0.68);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-blur: blur(22px) saturate(150%);
+  --glass-shadow: 0 1px 1px rgba(28, 35, 37, 0.03), 0 8px 28px rgba(28, 35, 37, 0.06);
+
+  --haze-1: var(--ice-sheet);
+  --haze-2: var(--moss);
+  --haze-3: var(--winter-soil);
+  --haze-1-opacity: 0.85;
+  --haze-2-opacity: 0.16;
+  --haze-3-opacity: 0.12;
 
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
     "Apple SD Gothic Neo", "Segoe UI", Roboto, "Malgun Gothic", sans-serif;
@@ -21,6 +45,9 @@
 
   --w-text: 42rem;
   --w-wide: 62rem;
+
+  --radius: 14px;
+  --radius-sm: 8px;
 
   --space-1: 0.5rem;
   --space-2: 1rem;
@@ -30,47 +57,83 @@
   --space-6: 6.5rem;
 }
 
+/* 다크 — 겨울밤의 산 */
 @media (prefers-color-scheme: dark) {
   :root {
-    --c-bg: #0d0d0f;
-    --c-surface: #161619;
-    --c-text: #f5f5f7;
-    --c-muted: #98989f;
-    --c-hairline: #26262b;
-    --c-accent: #ff5c1a;
-    --c-accent-hover: #ff7a42;
-    --c-code-bg: #161619;
+    --c-bg: #12181a;
+    --c-surface: #1a2224;
+    --c-text: #e6ecec;
+    --c-muted: #8a9296;
+    --c-hairline: rgba(230, 236, 236, 0.14);
+    --c-hairline-soft: rgba(230, 236, 236, 0.07);
+    --c-accent: #7ea19a;
+    --c-accent-hover: #9ab9b2;
+    --c-code-bg: rgba(255, 255, 255, 0.055);
+
+    --glass-bg: rgba(255, 255, 255, 0.055);
+    --glass-bg-strong: rgba(255, 255, 255, 0.09);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 28px rgba(0, 0, 0, 0.28);
+
+    --haze-1: #24363a;
+    --haze-1-opacity: 0.9;
+    --haze-2-opacity: 0.22;
+    --haze-3-opacity: 0.2;
   }
 }
 
 :root[data-theme="dark"] {
-  --c-bg: #0d0d0f;
-  --c-surface: #161619;
-  --c-text: #f5f5f7;
-  --c-muted: #98989f;
-  --c-hairline: #26262b;
-  --c-accent: #ff5c1a;
-  --c-accent-hover: #ff7a42;
-  --c-code-bg: #161619;
+  --c-bg: #12181a;
+  --c-surface: #1a2224;
+  --c-text: #e6ecec;
+  --c-muted: #8a9296;
+  --c-hairline: rgba(230, 236, 236, 0.14);
+  --c-hairline-soft: rgba(230, 236, 236, 0.07);
+  --c-accent: #7ea19a;
+  --c-accent-hover: #9ab9b2;
+  --c-code-bg: rgba(255, 255, 255, 0.055);
+
+  --glass-bg: rgba(255, 255, 255, 0.055);
+  --glass-bg-strong: rgba(255, 255, 255, 0.09);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 28px rgba(0, 0, 0, 0.28);
+
+  --haze-1: #24363a;
+  --haze-1-opacity: 0.9;
+  --haze-2-opacity: 0.22;
+  --haze-3-opacity: 0.2;
 }
 
 :root[data-theme="light"] {
-  --c-bg: #ffffff;
-  --c-surface: #f5f5f7;
-  --c-text: #0b0b0c;
-  --c-muted: #86868b;
-  --c-hairline: #e8e8ed;
-  --c-accent: #ff4e00;
-  --c-accent-hover: #d94200;
-  --c-code-bg: #f5f5f7;
+  --c-bg: var(--winter-haze);
+  --c-surface: var(--ice-sheet);
+  --c-text: var(--mountain-ink);
+  --c-muted: var(--stone);
+  --c-hairline: rgba(28, 35, 37, 0.14);
+  --c-hairline-soft: rgba(28, 35, 37, 0.07);
+  --c-accent: var(--moss);
+  --c-accent-hover: #354a46;
+  --c-code-bg: rgba(255, 255, 255, 0.5);
+
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-bg-strong: rgba(255, 255, 255, 0.68);
+  --glass-border: rgba(255, 255, 255, 0.65);
+  --glass-shadow: 0 1px 1px rgba(28, 35, 37, 0.03), 0 8px 28px rgba(28, 35, 37, 0.06);
+
+  --haze-1: var(--ice-sheet);
+  --haze-1-opacity: 0.85;
+  --haze-2-opacity: 0.16;
+  --haze-3-opacity: 0.12;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }
 
 body {
@@ -86,11 +149,56 @@ body {
 
 ::selection {
   background: var(--c-accent);
-  color: #fff;
+  color: var(--c-bg);
 }
 
 /* ==========================================================================
-   헤더 — 스티키 + 블러 (Apple)
+   대기 — 유리 뒤에서 번지는 빛. 고정되어 있고 움직이지 않는다.
+   ========================================================================== */
+
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.haze {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.haze-1 {
+  top: -14vh;
+  left: -6vw;
+  width: 58vw;
+  height: 58vw;
+  background: radial-gradient(circle, var(--haze-1) 0%, transparent 68%);
+  opacity: var(--haze-1-opacity);
+}
+
+.haze-2 {
+  top: 24vh;
+  right: -14vw;
+  width: 52vw;
+  height: 52vw;
+  background: radial-gradient(circle, var(--haze-2) 0%, transparent 66%);
+  opacity: var(--haze-2-opacity);
+}
+
+.haze-3 {
+  bottom: -22vh;
+  left: 22vw;
+  width: 64vw;
+  height: 46vw;
+  background: radial-gradient(circle, var(--haze-3) 0%, transparent 70%);
+  opacity: var(--haze-3-opacity);
+}
+
+/* ==========================================================================
+   헤더 — 유리 한 장
    ========================================================================== */
 
 .site-header {
@@ -102,14 +210,14 @@ body {
   justify-content: space-between;
   gap: var(--space-2);
   padding: 0.85rem clamp(1rem, 4vw, 2rem);
-  background: color-mix(in srgb, var(--c-bg) 82%, transparent);
-  -webkit-backdrop-filter: saturate(180%) blur(16px);
-  backdrop-filter: saturate(180%) blur(16px);
-  border-bottom: 1px solid var(--c-hairline);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .site-title {
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1rem;
   letter-spacing: -0.01em;
   color: var(--c-text);
@@ -128,17 +236,18 @@ body {
   justify-content: center;
   min-width: 44px;
   min-height: 44px;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 999px;
   background: transparent;
   color: var(--c-muted);
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .theme-toggle:hover,
 .theme-toggle:focus-visible {
-  background: var(--c-surface);
+  background: var(--glass-bg-strong);
+  border-color: var(--glass-border);
   color: var(--c-text);
 }
 
@@ -179,7 +288,7 @@ main {
 }
 
 /* ==========================================================================
-   히어로 — 큰 활자, 큰 여백 (Apple), 액센트는 한 단어 (Sony)
+   히어로
    ========================================================================== */
 
 .hero {
@@ -216,7 +325,7 @@ main {
 }
 
 /* ==========================================================================
-   섹션 라벨 — 소니 카탈로그의 기술 라벨 감각
+   섹션 라벨
    ========================================================================== */
 
 .section {
@@ -241,18 +350,27 @@ main {
 }
 
 /* ==========================================================================
-   포스트 리스트 — 번호가 붙은 카탈로그 (Sony), 넉넉한 행간 (Toss)
+   포스트 리스트 — 유리판 하나 위에 놓인 목록
    ========================================================================== */
 
 .post-list {
   list-style: none;
-  padding: 0;
+  padding: 0 clamp(0.75rem, 2vw, 1.4rem);
   margin: 0;
-  border-top: 1px solid var(--c-hairline);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
 }
 
 .post-list-item {
-  border-bottom: 1px solid var(--c-hairline);
+  border-bottom: 1px solid var(--c-hairline-soft);
+}
+
+.post-list-item:last-child {
+  border-bottom: none;
 }
 
 .post-list-item a {
@@ -263,7 +381,7 @@ main {
   padding: 1.35rem 0.25rem;
   text-decoration: none;
   color: var(--c-text);
-  transition: color 0.15s ease;
+  transition: color 0.2s ease;
 }
 
 .post-index {
@@ -293,7 +411,7 @@ main {
 }
 
 /* ==========================================================================
-   앱 카드 — 둥근 모서리, 들어올리는 호버 (Toss)
+   앱 카드 — 유리
    ========================================================================== */
 
 .app-list {
@@ -306,16 +424,18 @@ main {
 }
 
 .app-card {
-  border: 1px solid var(--c-hairline);
-  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
   padding: var(--space-2);
-  background: var(--c-surface);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  transition: background-color 0.2s ease;
 }
 
 .app-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  background: var(--glass-bg-strong);
 }
 
 .app-card h3 {
@@ -346,7 +466,7 @@ main {
   width: 100%;
   aspect-ratio: 4 / 3;
   border: 1px solid var(--c-hairline);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: var(--c-bg);
 }
 
@@ -383,7 +503,7 @@ a:hover {
 img {
   max-width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
 }
 
 hr {
@@ -421,10 +541,12 @@ code {
 }
 
 pre {
-  background: var(--c-code-bg);
-  border: 1px solid var(--c-hairline);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   padding: var(--space-2);
-  border-radius: 14px;
+  border-radius: var(--radius);
   overflow-x: auto;
 }
 
@@ -476,8 +598,10 @@ pre code {
 }
 
 .tag {
-  background: var(--c-surface);
-  border: 1px solid var(--c-hairline);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   border-radius: 999px;
   padding: 0.1rem 0.65rem;
   font-size: 0.78rem;
@@ -497,18 +621,41 @@ pre code {
   display: inline-block;
   padding: 0.7rem 1.3rem;
   border-radius: 999px;
-  background: var(--c-surface);
-  border: 1px solid var(--c-hairline);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
   color: var(--c-text);
   font-weight: 600;
   font-size: 0.9rem;
   text-decoration: none;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .post-nav a:hover {
   background: var(--c-text);
   color: var(--c-bg);
+}
+
+/* backdrop-filter 미지원 브라우저 — 불투명도를 올려 가독성을 지킨다 */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root,
+  :root[data-theme="light"] {
+    --glass-bg: rgba(255, 255, 255, 0.82);
+    --glass-bg-strong: rgba(255, 255, 255, 0.92);
+  }
+
+  :root[data-theme="dark"] {
+    --glass-bg: rgba(30, 38, 40, 0.9);
+    --glass-bg-strong: rgba(36, 45, 47, 0.95);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --glass-bg: rgba(30, 38, 40, 0.9);
+      --glass-bg-strong: rgba(36, 45, 47, 0.95);
+    }
+  }
 }
 
 /* ==========================================================================

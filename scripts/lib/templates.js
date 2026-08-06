@@ -47,6 +47,11 @@ export function layout({ title, basePath, bodyHtml }) {
 </script>
 </head>
 <body>
+<div class="atmosphere" aria-hidden="true">
+  <span class="haze haze-1"></span>
+  <span class="haze haze-2"></span>
+  <span class="haze haze-3"></span>
+</div>
 <header class="site-header">
   <a class="site-title" href="${basePath}index.html">감도 <span class="hanja">感度</span></a>
   <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
