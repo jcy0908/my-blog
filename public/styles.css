@@ -680,3 +680,87 @@ pre code {
     padding-top: var(--space-5);
   }
 }
+
+/* ==========================================================================
+   Fluid — 반응·재질·접근성
+   (Apple, Designing Fluid Interfaces)
+   ========================================================================== */
+
+.post-list-item a,
+.app-card,
+.post-nav a,
+.theme-toggle,
+.site-title {
+  touch-action: manipulation; /* 300ms 탭 지연 제거 */
+}
+
+.post-list-item a,
+.post-nav a,
+.app-card {
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease-out;
+}
+
+.post-list-item a.is-pressed,
+.post-nav a.is-pressed,
+.theme-toggle.is-pressed,
+.site-title.is-pressed {
+  transform: scale(0.985);
+}
+
+.app-card.is-pressed {
+  transform: scale(0.99);
+}
+
+/* 스크롤 엣지 — 겹칠 때만 경계가 나타난다 */
+.site-header {
+  border-bottom-color: transparent;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.site-header.is-overlapping {
+  border-bottom-color: var(--glass-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post-list-item a.is-pressed,
+  .post-nav a.is-pressed,
+  .theme-toggle.is-pressed,
+  .site-title.is-pressed,
+  .app-card.is-pressed {
+    transform: none;
+  }
+}
+
+/* 투명도를 줄이고 싶은 사용자 — 유리를 걷어내고 불투명하게 */
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  :root[data-theme="light"] {
+    --glass-bg: rgba(255, 255, 255, 0.96);
+    --glass-bg-strong: #ffffff;
+    --glass-blur: none;
+  }
+
+  :root[data-theme="dark"] {
+    --glass-bg: #1a2224;
+    --glass-bg-strong: #222c2e;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --glass-bg: #1a2224;
+      --glass-bg-strong: #222c2e;
+    }
+  }
+}
+
+/* 대비를 높이고 싶은 사용자 — 경계를 분명히 */
+@media (prefers-contrast: more) {
+  :root {
+    --glass-border: var(--c-text);
+    --c-muted: #4a5457;
+  }
+
+  :root[data-theme="dark"] {
+    --c-muted: #b9c1c1;
+  }
+}
