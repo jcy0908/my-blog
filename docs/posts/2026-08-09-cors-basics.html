@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CORS, 브라우저가 API 요청을 막는 이유 — 감도 感度</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<div class="atmosphere" aria-hidden="true">
+  <span class="haze haze-1"></span>
+  <span class="haze haze-2"></span>
+  <span class="haze haze-3"></span>
+</div>
+<header class="site-header">
+  <a class="site-title" href="../index.html">감도 <span class="hanja">感度</span></a>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="theme-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <span class="visually-hidden">테마 전환</span>
+  </button>
+</header>
+<main>
+<article class="post-page">
+  <header class="post-header">
+    <h1>CORS, 브라우저가 API 요청을 막는 이유</h1>
+    <p class="post-meta">
+      <time datetime="2026-08-09">2026년 8월 9일</time>
+      <ul class="tag-list"><li class="tag">브라우저</li><li class="tag">네트워크</li><li class="tag">보안</li></ul>
+    </p>
+  </header>
+  <div class="post-content">
+<p>오늘 로컬에서 다른 포트에 떠 있는 API 서버를 호출하다가 콘솔에 시뻘건 CORS 에러를 봤다. 그동안은 "서버에서 헤더만 설정하면 되지" 하고 대충 넘어갔었는데, 오늘은 브라우저가 왜 이걸 막는지 제대로 들여다봤다.</p>
+<h2>same-origin policy가 기본값</h2>
+<p>브라우저는 기본적으로 스크립트가 자신과 다른 출처(origin)의 리소스를 읽지 못하게 막는다. origin은 프로토콜, 호스트, 포트 세 가지가 모두 같아야 동일하다고 판단한다. 이 정책이 없으면 내가 열어둔 은행 사이트 탭의 쿠키를 아무 사이트에서나 <code>fetch</code>로 훔쳐볼 수 있다.</p>
+<h2>서버가 허가증을 내주는 방식</h2>
+<p>교차 출처 요청 자체가 막히는 건 아니다. 요청은 실제로 서버까지 도달하고, 브라우저가 응답 헤더를 검사해서 스크립트에 넘겨줘도 되는지 판단한다. 서버가 <code>Access-Control-Allow-Origin</code> 헤더로 허용 출처를 명시해야 그때 응답을 읽을 수 있다.</p>
+<h2>preflight, 사전 확인 요청</h2>
+<p><code>PUT</code> 메서드나 커스텀 헤더처럼 "단순 요청" 범위를 벗어나면 브라우저는 실제 요청 전에 <code>OPTIONS</code> 메서드로 preflight 요청을 먼저 보낸다. 서버가 이 예비 질문에 허용 응답을 줘야만 진짜 요청이 나간다.</p>
+<p>정리하면 CORS는 서버를 보호하는 장치가 아니라, 브라우저가 사용자를 보호하려고 응답을 읽기 전에 거치는 검문소다. 에러를 만나면 요청이 실패한 게 아니라 응답을 막힌 것이니, 서버 쪽 헤더부터 확인하면 된다.</p>
+  </div>
+</article>
+<p class="post-nav"><a href="../index.html">← 목록으로</a></p>
+</main>
+<footer class="site-footer">
+  <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>
