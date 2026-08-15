@@ -1,3 +1,5 @@
-.claude/
+# 개인 설정(settings.local.json 등)은 제외하되, 공유 스킬은 커밋한다
+.claude/*
+!.claude/skills/
 .DS_Store
 node_modules/
