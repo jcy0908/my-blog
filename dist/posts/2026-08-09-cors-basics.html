@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
 <title>CORS, 브라우저가 API 요청을 막는 이유 — 감도 感度</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
@@ -18,28 +21,34 @@
 </script>
 </head>
 <body>
-<div class="atmosphere" aria-hidden="true">
-  <span class="haze haze-1"></span>
-  <span class="haze haze-2"></span>
-  <span class="haze haze-3"></span>
-</div>
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
 <header class="site-header">
-  <a class="site-title" href="../index.html">감도 <span class="hanja">感度</span></a>
-  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
-    <svg class="theme-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-    <span class="visually-hidden">테마 전환</span>
-  </button>
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
 </header>
-<main>
+<main id="content" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
     <h1>CORS, 브라우저가 API 요청을 막는 이유</h1>
-    <p class="post-meta">
+    <div class="post-meta">
       <time datetime="2026-08-09">2026년 8월 9일</time>
       <ul class="tag-list"><li class="tag">브라우저</li><li class="tag">네트워크</li><li class="tag">보안</li></ul>
-    </p>
+    </div>
   </header>
   <div class="post-content">
 <p>오늘 로컬에서 다른 포트에 떠 있는 API 서버를 호출하다가 콘솔에 시뻘건 CORS 에러를 봤다. 그동안은 "서버에서 헤더만 설정하면 되지" 하고 대충 넘어갔었는데, 오늘은 브라우저가 왜 이걸 막는지 제대로 들여다봤다.</p>
@@ -52,10 +61,14 @@
 <p>정리하면 CORS는 서버를 보호하는 장치가 아니라, 브라우저가 사용자를 보호하려고 응답을 읽기 전에 거치는 검문소다. 에러를 만나면 요청이 실패한 게 아니라 응답을 막힌 것이니, 서버 쪽 헤더부터 확인하면 된다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html">← 목록으로</a></p>
+<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
 </main>
 <footer class="site-footer">
-  <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
 </footer>
 <script type="module" src="../theme.js"></script>
 </body>
