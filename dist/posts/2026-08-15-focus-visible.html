@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마우스 클릭엔 없고 탭 이동엔 있는 포커스 링, :focus-visible — 감도 感度</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      document.documentElement.dataset.theme = theme;
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<div class="atmosphere" aria-hidden="true">
+  <span class="haze haze-1"></span>
+  <span class="haze haze-2"></span>
+  <span class="haze haze-3"></span>
+</div>
+<header class="site-header">
+  <a class="site-title" href="../index.html">감도 <span class="hanja">感度</span></a>
+  <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+    <svg class="theme-toggle-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+    <span class="visually-hidden">테마 전환</span>
+  </button>
+</header>
+<main>
+<article class="post-page">
+  <header class="post-header">
+    <h1>마우스 클릭엔 없고 탭 이동엔 있는 포커스 링, :focus-visible</h1>
+    <p class="post-meta">
+      <time datetime="2026-08-15">2026년 8월 15일</time>
+      <ul class="tag-list"><li class="tag">접근성</li><li class="tag">CSS</li></ul>
+    </p>
+  </header>
+  <div class="post-content">
+<p>버튼을 마우스로 클릭했을 때 파란 테두리가 생기는 게 거슬려서 <code>outline: none</code>을 습관처럼 넣곤 한다. 그런데 이건 마우스 사용자에게만 좋고, 키보드로 탭 이동을 하는 사용자에게는 지금 포커스가 어디 있는지 알 수 없게 만드는 접근성 문제다. <code>:focus-visible</code>은 이 둘을 동시에 만족시키기 위해 나온 가상 클래스다.</p>
+<h2>왜 포커스 링이 필요한가</h2>
+<p>키보드로 <code>Tab</code>을 눌러 페이지를 탐색하는 사용자에게 포커스 링은 유일한 위치 표시다. 이게 사라지면 지금 어떤 요소를 조작하려는 건지 알 수 없다. 그래서 무작정 <code>outline: none</code>을 쓰는 건 스크린 리더 없이도 겪는 대표적인 접근성 저하 사례다.</p>
+<h2>:focus와 :focus-visible의 차이</h2>
+<p><code>:focus</code>는 포커스를 받은 모든 요소에 적용되지만, <code>:focus-visible</code>은 브라우저가 판단하기에 키보드 등 명시적인 탐색으로 포커스가 온 경우에만 적용된다. 마우스 클릭으로 포커스된 버튼에는 링이 안 붙고, <code>Tab</code>으로 이동했을 때만 링이 나타난다.</p>
+<pre><code class="language-css">button:focus {
+  outline: none;
+}
+
+button:focus-visible {
+  outline: 2px solid #4f8cff;
+  outline-offset: 2px;
+}</code></pre>
+<h2>실무에서 쓰는 방법</h2>
+<p><code>outline</code>을 완전히 지우지 말고 <code>:focus-visible</code>로 옮기는 것만으로 대부분의 상황이 해결된다. 커스텀 디자인이 필요하면 <code>outline</code> 대신 <code>box-shadow</code>로 대체해도 되지만, 색 대비를 충분히 확보해야 키보드 사용자가 놓치지 않는다.</p>
+<hr>
+<p>정리하면, 포커스 스타일을 아예 없애는 대신 <code>:focus-visible</code>로 키보드 탐색일 때만 보이게 하면 디자인과 접근성을 동시에 챙길 수 있다. <code>outline: none</code>을 쓰기 전에 한 번은 <code>:focus-visible</code> 지원 여부부터 확인하는 습관을 들이면 좋겠다.</p>
+  </div>
+</article>
+<p class="post-nav"><a href="../index.html">← 목록으로</a></p>
+</main>
+<footer class="site-footer">
+  <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>
