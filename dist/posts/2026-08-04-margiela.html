@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="마르지엘라, 안감을 밖으로. 감도 感度의 기록입니다.">
 <title>마르지엘라, 안감을 밖으로 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>마르지엘라, 안감을 밖으로</h1>
     <div class="post-meta">
       <time datetime="2026-08-04">2026년 8월 4일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">패션</li><li class="tag">구조</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>마르지엘라의 옷을 보면 재봉선이 밖에 나와 있다. 안감이 겉감처럼 쓰이고, 시침질 자국이 그대로 남아 있다. 원래는 숨겨야 하는 것들이다.</p>
 <p>처음 봤을 때는 그냥 파격이라고 생각했다. 그런데 오래 보니 파격이 목적이 아니었다. 옷이 어떻게 만들어지는지를 옷 자체가 설명하고 있었다. 구조를 숨기는 대신 구조를 디자인으로 만든 것이다.</p>
 <p>이게 왜 좋았는지 한참 뒤에 알았다. 나는 뭔가를 배울 때 완성품보다 만드는 과정이 보고 싶은 사람이다. 완성된 화면은 감탄만 하게 되는데, 과정이 드러나면 따라 해 볼 수가 있다. 마르지엘라의 옷은 완성품이면서 동시에 제작 설명서다.</p>
@@ -58,7 +66,19 @@
 <p>숨겨야 할 것과 보여 줘도 되는 것의 경계는 생각보다 관습일 뿐인지도 모른다. 마르지엘라는 그 관습을 뒤집어서 하나의 언어를 만들었다. 나는 아직 그 언어의 단어 몇 개를 주운 정도다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-05-kyoto-garden.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">교토의 정원은 왜 비어 있는가</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-03-issey-miyake.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">이세이 미야케의 주름은 장식이 아니다</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

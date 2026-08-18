@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="script 태그의 async와 defer, 언제 다른 결과를 만드는가. 감도 感度의 기록입니다.">
 <title>script 태그의 async와 defer, 언제 다른 결과를 만드는가 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>script 태그의 async와 defer, 언제 다른 결과를 만드는가</h1>
     <div class="post-meta">
       <time datetime="2026-08-16">2026년 8월 16일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">HTML</li><li class="tag">성능</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>오늘은 <code>&lt;script&gt;</code> 태그에 붙는 async와 defer 속성이 실제로 무엇을 바꾸는지 확인했다. 두 속성 모두 "스크립트를 비동기로 가져온다"는 점은 같지만, <strong>실행 시점</strong>이 완전히 다르다는 걸 제대로 짚어본 적이 없었다.</p>
 <h2>기본 동작: 아무 속성도 없을 때</h2>
 <p>속성이 없는 <code>&lt;script&gt;</code>는 HTML 파싱을 즉시 멈추고 스크립트를 다운로드한 뒤 실행하고, 끝나야 파싱을 재개한다. 스크립트가 크거나 네트워크가 느리면 그만큼 화면이 늦게 그려진다.</p>
@@ -60,10 +68,22 @@
 <p>defer도 다운로드는 백그라운드에서 하지만, 실행은 DOMContentLoaded 직전까지 미룬다. 여러 defer 스크립트는 <strong>문서에 적힌 순서대로</strong> 실행되므로, 모듈 간 의존성이 있는 코드에 적합하다.</p>
 <pre><code class="language-html">&lt;script src="analytics.js" async&gt;&lt;/script&gt;
 &lt;script src="app.js" defer&gt;&lt;/script&gt;</code></pre>
-<p>오늘 배운 건 결국 "언제 실행되느냐"의 차이였다. 순서가 중요하지 않고 독립적으로 동작하면 async, DOM 구조나 다른 스크립트 순서에 의존한다면 defer를 쓰면 된다. &lt;/content&gt;</p>
+<p>오늘 배운 건 결국 "언제 실행되느냐"의 차이였다. 순서가 중요하지 않고 독립적으로 동작하면 async, DOM 구조나 다른 스크립트 순서에 의존한다면 defer를 쓰면 된다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-18-request-animation-frame.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">setTimeout 대신 requestAnimationFrame을 쓰는 이유</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-15-focus-visible.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">마우스 클릭엔 없고 탭 이동엔 있는 포커스 링, :focus-visible</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

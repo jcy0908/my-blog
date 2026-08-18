@@ -50,9 +50,23 @@ function readPosts() {
       isoDate: Number.isNaN(dateObj.getTime()) ? '' : dateObj.toISOString().slice(0, 10),
       dateObj,
       tags: Array.isArray(data.tags) ? data.tags : [],
+      readingMinutes: estimateReadingMinutes(content),
       html: markdownToHtml(content),
     };
   });
+}
+
+function estimateReadingMinutes(markdown) {
+  const prose = markdown
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]+`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/[#>*_~-]/g, ' ');
+  const koreanCharacters = (prose.match(/[가-힣]/g) || []).length;
+  const otherWords = (prose.replace(/[가-힣]/g, ' ').match(/[\p{L}\p{N}]+/gu) || []).length;
+
+  return Math.max(1, Math.ceil(koreanCharacters / 500 + otherWords / 220));
 }
 
 function build() {
@@ -62,8 +76,14 @@ function build() {
   const posts = readPosts().sort((a, b) => b.dateObj - a.dateObj);
   const apps = readApps();
 
-  for (const post of posts) {
-    fs.writeFileSync(path.join(distPostsDir, `${post.slug}.html`), renderPostPage(post));
+  for (const [index, post] of posts.entries()) {
+    fs.writeFileSync(
+      path.join(distPostsDir, `${post.slug}.html`),
+      renderPostPage(post, {
+        newerPost: posts[index - 1],
+        olderPost: posts[index + 1],
+      })
+    );
   }
 
   for (const app of apps) {

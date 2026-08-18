@@ -26,7 +26,15 @@ function inlineToHtml(text) {
     /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
     (_, alt, url, title) => {
       const titleAttr = title ? ' title="' + escapeQuotes(title) + '"' : '';
-      return '<img src="' + escapeQuotes(url) + '" alt="' + escapeQuotes(alt) + '"' + titleAttr + '>';
+      return (
+        '<img src="' +
+        escapeQuotes(url) +
+        '" alt="' +
+        escapeQuotes(alt) +
+        '" loading="lazy" decoding="async"' +
+        titleAttr +
+        '>'
+      );
     }
   );
 

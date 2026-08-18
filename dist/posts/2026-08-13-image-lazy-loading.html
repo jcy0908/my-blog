@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="이미지 지연 로딩, loading=&quot;lazy&quot;와 IntersectionObserver. 감도 感度의 기록입니다.">
 <title>이미지 지연 로딩, loading=&quot;lazy&quot;와 IntersectionObserver — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>이미지 지연 로딩, loading=&quot;lazy&quot;와 IntersectionObserver</h1>
     <div class="post-meta">
       <time datetime="2026-08-13">2026년 8월 13일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">브라우저</li><li class="tag">성능</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>글이 길어질수록 이미지도 늘어나는데, 화면 밖에 있는 이미지까지 페이지 로드 시점에 전부 받아오면 첫 화면이 뜨는 속도가 느려진다. 오늘은 화면에 보일 때만 이미지를 불러오는 지연 로딩 방법 두 가지를 정리했다.</p>
 <h2>네이티브 속성 하나로 끝내기</h2>
 <p>가장 간단한 방법은 <code>img</code> 태그에 <code>loading="lazy"</code>를 붙이는 것이다. 브라우저가 알아서 뷰포트에 가까워질 때 이미지를 요청한다. 별도 스크립트 없이 브라우저 기본 기능만으로 동작하지만, 언제 얼마나 미리 불러올지는 브라우저마다 다르고 세밀하게 조정할 수 없다는 한계가 있다.</p>
@@ -70,7 +78,19 @@ document.querySelectorAll('img[data-src]').forEach((img) =&gt; io.observe(img));
 <p>간단한 목록형 페이지라면 <code>loading="lazy"</code> 한 줄로 충분하고, 로딩 시점을 세밀하게 조정하거나 이미지 외의 콘텐츠까지 지연시키고 싶다면 IntersectionObserver를 쓰는 게 낫다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-14-css-specificity.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">CSS 선택자의 우선순위, 명시도(Specificity) 계산법</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-12-debounce-throttle.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">디바운스와 스로틀, 이벤트 폭탄 다루는 법</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

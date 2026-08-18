@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="콘솔 로그 순서로 이해하는 자바스크립트 이벤트 루프. 감도 感度의 기록입니다.">
 <title>콘솔 로그 순서로 이해하는 자바스크립트 이벤트 루프 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>콘솔 로그 순서로 이해하는 자바스크립트 이벤트 루프</h1>
     <div class="post-meta">
       <time datetime="2026-08-11">2026년 8월 11일</time>
+      <span>2분 읽기</span>
       <ul class="tag-list"><li class="tag">JavaScript</li><li class="tag">브라우저</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p><code>setTimeout(fn, 0)</code>과 <code>Promise.resolve().then(fn)</code>을 나란히 써 놓고 어떤 게 먼저 실행될지 맞춰보라고 하면 은근히 헷갈린다. 둘 다 "나중에" 실행되는 건 맞는데, 그 "나중"의 순서가 다르기 때문이다. 오늘은 이벤트 루프가 이 순서를 어떻게 정하는지 정리했다.</p>
 <h2>콜 스택은 하나뿐</h2>
 <p>자바스크립트는 싱글 스레드라서 콜 스택이 하나뿐이다. 함수가 호출되면 스택에 쌓이고, 끝나면 빠진다. 스택이 비어야 다음 작업을 처리할 수 있는데, 비동기 함수들은 바로 스택에 올라가지 못하고 각자의 큐에서 순서를 기다린다.</p>
@@ -66,7 +74,19 @@ console.log('end');</code></pre>
 <p>순서가 헷갈릴 땐 "동기 코드 → 마이크로태스크 큐 전부 → 매크로태스크 하나" 이 세 단계만 기억하면 대부분의 케이스를 설명할 수 있다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-12-debounce-throttle.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">디바운스와 스로틀, 이벤트 폭탄 다루는 법</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-10-reflow-repaint.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">브라우저는 화면을 어떻게 다시 그리는가, 리플로우와 리페인트</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

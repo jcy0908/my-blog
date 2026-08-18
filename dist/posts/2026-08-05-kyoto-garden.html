@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="교토의 정원은 왜 비어 있는가. 감도 感度의 기록입니다.">
 <title>교토의 정원은 왜 비어 있는가 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>교토의 정원은 왜 비어 있는가</h1>
     <div class="post-meta">
       <time datetime="2026-08-05">2026년 8월 5일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">공간</li><li class="tag">여백</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>교토의 정원 사진을 처음 봤을 때, 이상하게 오래 쳐다보게 됐다. 화면의 대부분이 비어 있었다. 모래, 이끼, 돌 몇 개. 그게 전부였다.</p>
 <p>처음에는 "미니멀해서 좋다"고 정리하고 넘어갔다. 그런데 그 말은 아무것도 설명하지 못한다. 요소가 적은 화면은 세상에 많고, 대부분은 그냥 허전하다. 교토의 정원은 허전하지 않다. 이 차이가 어디서 오는지가 궁금했다.</p>
 <p>내가 지금까지 도달한 답은 이렇다. 그 여백은 "안 채운 것"이 아니라 "치운 것"이다. 돌 하나를 그 자리에 두기 위해 나머지 전부를 비웠다. 그러니까 여백은 배경이 아니라, 돌을 가리키는 손가락이다. 비어 있는 면적이 넓을수록 남아 있는 것의 밀도는 올라간다.</p>
@@ -58,7 +66,19 @@
 <p>블로그를 만들면서 이 문법을 흉내 내 보고 있다. 화면에 뭘 더 넣을지가 아니라, 뭘 빼도 되는지를 먼저 묻는 것. 아직은 빼는 게 무섭다. 비워 두면 실수처럼 보일까 봐. 교토의 정원사는 그 두려움을 어떻게 넘었을까.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-06-event-delegation.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">이벤트 위임으로 리스너 줄이기</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-04-margiela.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">마르지엘라, 안감을 밖으로</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">
