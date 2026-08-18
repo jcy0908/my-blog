@@ -1,19 +1,30 @@
-// 2048 게임 로직 — 순수 바닐라 JS (외부 의존성 없음)
+// 2048 — 그리기와 입력. 규칙은 rules 모듈이 맡는다.
 // 그리드 좌표는 x = column(0~3), y = row(0~3) 을 사용한다.
+//
+// 규칙(이동·병합·게임오버 판정)은 C++로 쓰여 WebAssembly로 빌드된
+// grid.wasm이 계산한다. 받지 못하면 같은 API의 JS 구현(rules.js)으로
+// 되돌아가고 게임은 똑같이 돌아간다.
+//
+// 두 구현이 같은 값을 낸다는 것은 tools/2048_equivalence.mjs가 확인한다 —
+// 무작위 200판 27,507수를 판·점수·타일 정체성까지 대조한다.
 
-const SIZE = 4;
-const WIN_VALUE = 2048;
+let rules;
+let rulesEngine = "JavaScript";
+try {
+  rules = await import("./rules-wasm.js");
+  await rules.loadGridWasm();
+  rulesEngine = "WebAssembly (C++)";
+} catch (err) {
+  rules = await import("./rules.js");
+}
+console.info(`2048 — 규칙 엔진: ${rulesEngine}`);
+
+const { SIZE, WIN_VALUE, createEmptyCells, forEachCell, availableCells } = rules;
+
 const TRANSITION_MS = 110; // style.css의 .tile transition 시간과 맞춤
 const SWIPE_THRESHOLD = 24; // px
 const BEST_SCORE_KEY = "2048-best-score";
 const THEME_KEY = "2048-theme";
-
-const VECTORS = {
-  up: { x: 0, y: -1 },
-  down: { x: 0, y: 1 },
-  left: { x: -1, y: 0 },
-  right: { x: 1, y: 0 },
-};
 
 // ===== DOM 참조 =====
 const boardGrid = document.getElementById("board-grid");
@@ -51,39 +62,6 @@ function createTile(x, y, value) {
   };
 }
 
-function createEmptyCells() {
-  const cells = [];
-  for (let x = 0; x < SIZE; x++) {
-    cells.push(new Array(SIZE).fill(null));
-  }
-  return cells;
-}
-
-function withinBounds(x, y) {
-  return x >= 0 && x < SIZE && y >= 0 && y < SIZE;
-}
-
-function cellAvailable(cells, x, y) {
-  return withinBounds(x, y) && cells[x][y] === null;
-}
-
-function forEachCell(cells, callback) {
-  for (let x = 0; x < SIZE; x++) {
-    for (let y = 0; y < SIZE; y++) {
-      callback(cells[x][y], x, y);
-    }
-  }
-}
-
-function availableCells(cells) {
-  const result = [];
-  forEachCell(cells, (tile, x, y) => {
-    if (!tile) result.push({ x, y });
-  });
-  return result;
-}
-
-// ===== 게임 초기화 =====
 function newGame() {
   const best = Number(localStorage.getItem(BEST_SCORE_KEY)) || 0;
   state = {
@@ -117,106 +95,6 @@ function addRandomTile() {
   const tile = createTile(x, y, value);
   state.cells[x][y] = tile;
   return tile;
-}
-
-// ===== 이동 로직 =====
-function buildTraversals(vector) {
-  const traversal = [0, 1, 2, 3];
-  const xs = vector.x === 1 ? [...traversal].reverse() : [...traversal];
-  const ys = vector.y === 1 ? [...traversal].reverse() : [...traversal];
-  return { xs, ys };
-}
-
-function findFarthestPosition(cells, cell, vector) {
-  let previous;
-  let current = cell;
-  do {
-    previous = current;
-    current = { x: previous.x + vector.x, y: previous.y + vector.y };
-  } while (withinBounds(current.x, current.y) && cellAvailable(cells, current.x, current.y));
-
-  return { farthest: previous, next: current };
-}
-
-function moveTileTo(cells, tile, x, y) {
-  cells[tile.x][tile.y] = null;
-  tile.x = x;
-  tile.y = y;
-  cells[x][y] = tile;
-}
-
-function prepareTiles(cells) {
-  forEachCell(cells, (tile) => {
-    if (!tile) return;
-    tile.previousX = tile.x;
-    tile.previousY = tile.y;
-    tile.mergedFrom = null;
-  });
-}
-
-function move(direction) {
-  const vector = VECTORS[direction];
-  const cells = state.cells;
-  prepareTiles(cells);
-
-  let moved = false;
-  let scoreGain = 0;
-  let won = false;
-
-  const { xs, ys } = buildTraversals(vector);
-
-  xs.forEach((x) => {
-    ys.forEach((y) => {
-      const tile = cells[x][y];
-      if (!tile) return;
-
-      const originalX = tile.x;
-      const originalY = tile.y;
-      const { farthest, next } = findFarthestPosition(cells, tile, vector);
-      const nextTile = withinBounds(next.x, next.y) ? cells[next.x][next.y] : null;
-
-      if (nextTile && nextTile.value === tile.value && !nextTile.mergedFrom) {
-        const merged = createTile(next.x, next.y, tile.value * 2);
-        merged.mergedFrom = [tile, nextTile];
-
-        cells[tile.x][tile.y] = null;
-        tile.x = next.x;
-        tile.y = next.y;
-        cells[next.x][next.y] = merged;
-
-        scoreGain += merged.value;
-        if (merged.value === WIN_VALUE) won = true;
-        moved = true;
-      } else {
-        moveTileTo(cells, tile, farthest.x, farthest.y);
-        if (farthest.x !== originalX || farthest.y !== originalY) moved = true;
-      }
-    });
-  });
-
-  return { moved, scoreGain, won };
-}
-
-function movesAvailable() {
-  if (availableCells(state.cells).length > 0) return true;
-
-  for (let x = 0; x < SIZE; x++) {
-    for (let y = 0; y < SIZE; y++) {
-      const tile = state.cells[x][y];
-      if (!tile) continue;
-      const neighbors = [
-        { x: x + 1, y },
-        { x, y: y + 1 },
-      ];
-      for (const n of neighbors) {
-        if (withinBounds(n.x, n.y)) {
-          const other = state.cells[n.x][n.y];
-          if (other && other.value === tile.value) return true;
-        }
-      }
-    }
-  }
-  return false;
 }
 
 // ===== 렌더링 =====
@@ -357,7 +235,7 @@ function hideOverlay() {
 function attemptMove(direction) {
   if (animating || blocked) return;
 
-  const result = move(direction);
+  const result = rules.move(state.cells, direction, createTile);
   if (!result.moved) return;
 
   animating = true;
@@ -384,7 +262,7 @@ function attemptMove(direction) {
       return;
     }
 
-    if (!movesAvailable()) {
+    if (!rules.movesAvailable(state.cells)) {
       state.over = true;
       showOverlay("Game Over", { showContinue: false });
     }
