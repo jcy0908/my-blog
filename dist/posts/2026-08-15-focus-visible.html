@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="마우스 클릭엔 없고 탭 이동엔 있는 포커스 링, :focus-visible. 감도 感度의 기록입니다.">
 <title>마우스 클릭엔 없고 탭 이동엔 있는 포커스 링, :focus-visible — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>마우스 클릭엔 없고 탭 이동엔 있는 포커스 링, :focus-visible</h1>
     <div class="post-meta">
       <time datetime="2026-08-15">2026년 8월 15일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">접근성</li><li class="tag">CSS</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>버튼을 마우스로 클릭했을 때 파란 테두리가 생기는 게 거슬려서 <code>outline: none</code>을 습관처럼 넣곤 한다. 그런데 이건 마우스 사용자에게만 좋고, 키보드로 탭 이동을 하는 사용자에게는 지금 포커스가 어디 있는지 알 수 없게 만드는 접근성 문제다. <code>:focus-visible</code>은 이 둘을 동시에 만족시키기 위해 나온 가상 클래스다.</p>
 <h2>왜 포커스 링이 필요한가</h2>
 <p>키보드로 <code>Tab</code>을 눌러 페이지를 탐색하는 사용자에게 포커스 링은 유일한 위치 표시다. 이게 사라지면 지금 어떤 요소를 조작하려는 건지 알 수 없다. 그래서 무작정 <code>outline: none</code>을 쓰는 건 스크린 리더 없이도 겪는 대표적인 접근성 저하 사례다.</p>
@@ -70,7 +78,19 @@ button:focus-visible {
 <p>정리하면, 포커스 스타일을 아예 없애는 대신 <code>:focus-visible</code>로 키보드 탐색일 때만 보이게 하면 디자인과 접근성을 동시에 챙길 수 있다. <code>outline: none</code>을 쓰기 전에 한 번은 <code>:focus-visible</code> 지원 여부부터 확인하는 습관을 들이면 좋겠다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-16-script-async-defer.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">script 태그의 async와 defer, 언제 다른 결과를 만드는가</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-14-css-specificity.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">CSS 선택자의 우선순위, 명시도(Specificity) 계산법</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

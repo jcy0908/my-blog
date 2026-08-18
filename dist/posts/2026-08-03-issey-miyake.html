@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="이세이 미야케의 주름은 장식이 아니다. 감도 感度의 기록입니다.">
 <title>이세이 미야케의 주름은 장식이 아니다 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>이세이 미야케의 주름은 장식이 아니다</h1>
     <div class="post-meta">
       <time datetime="2026-08-03">2026년 8월 3일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">패션</li><li class="tag">기능</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>이세이 미야케의 플리츠를 처음 만졌을 때 놀란 건 모양이 아니라 무게였다. 가볍고, 구겨지지 않고, 개면 손바닥만 해진다. 주름이 예뻐서 잡은 옷인데, 알고 보니 주름이 이 옷의 기능 그 자체였다.</p>
 <p>보통 옷은 형태를 먼저 정하고 장식을 얹는다. 플리츠 플리즈는 반대다. "관리가 쉽고 누구나 입을 수 있는 옷"이라는 문제를 풀었더니 그 답이 주름이라는 형태로 나왔다. 장식과 기능이 같은 것이 되는 순간이다.</p>
 <p>이 순서가 중요하다고 생각한다. 아름다움을 목표로 삼으면 장식이 나오고, 문제를 목표로 삼으면 형태가 나온다. 뱅앤올룹슨의 스피커가 조형물처럼 보이는 것도, 알고 보면 소리와 소재의 문제를 풀어낸 결과가 그 형태인 것이다.</p>
@@ -58,7 +66,19 @@
 <p>형태는 결론이지 출발점이 아니다. 미야케의 주름이 나에게 가르쳐 준 문장이다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-04-margiela.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">마르지엘라, 안감을 밖으로</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-02-bang-olufsen.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">뱅앤올룹슨과 알루미늄의 온도</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

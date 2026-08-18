@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="z-index가 안 먹히는 이유, 스태킹 컨텍스트. 감도 感度의 기록입니다.">
 <title>z-index가 안 먹히는 이유, 스태킹 컨텍스트 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>z-index가 안 먹히는 이유, 스태킹 컨텍스트</h1>
     <div class="post-meta">
       <time datetime="2026-08-07">2026년 8월 7일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">CSS</li><li class="tag">스태킹컨텍스트</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>z-index 값을 아무리 높여도 다른 요소 뒤에 가려지는 경험은 CSS를 다루다 보면 한 번쯤 겪게 된다. 원인은 단순한 숫자 비교가 아니라 <strong>스태킹 컨텍스트(stacking context)</strong> 라는 별도의 쌓임 단위 때문이다.</p>
 <h2>스태킹 컨텍스트란</h2>
 <p>스태킹 컨텍스트는 요소들이 z축 방향으로 쌓이는 독립적인 그룹이다. 하나의 컨텍스트 안에서만 z-index 값이 서로 비교되며, 다른 컨텍스트에 속한 요소와는 직접 비교되지 않는다.</p>
@@ -68,7 +76,19 @@
 <p>z-index 문제를 만나면 값을 무작정 올리기보다, 조상 요소 중 스태킹 컨텍스트를 만드는 속성이 있는지부터 확인하는 습관을 들이면 디버깅 시간을 크게 줄일 수 있다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-08-git-rebase-vs-merge.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">Git rebase와 merge, 히스토리를 다르게 남기는 법</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-06-event-delegation.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">이벤트 위임으로 리스너 줄이기</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">

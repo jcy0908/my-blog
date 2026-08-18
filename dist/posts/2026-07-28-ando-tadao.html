@@ -2,26 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#f4f2ec">
-<meta name="description" content="좋았던 것들이 왜 좋았는지, 감각과 구조를 언어로 기록하는 감도 感度입니다.">
+<meta name="description" content="안도 다다오의 뮤지엄 산에서. 감도 感度의 기록입니다.">
 <title>안도 다다오의 뮤지엄 산에서 — 감도 感度</title>
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="../styles.css">
 <script>
 (function () {
+  var root = document.documentElement;
+  root.classList.add('js');
   try {
     var theme = localStorage.getItem('theme');
     if (theme === 'dark' || theme === 'light') {
-      document.documentElement.dataset.theme = theme;
+      root.dataset.theme = theme;
     }
   } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
 </head>
-<body>
+<body class="page-post">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
 <header class="site-header">
   <div class="site-header-inner">
     <a class="site-title" href="../index.html" aria-label="감도 홈">
@@ -40,17 +47,18 @@
     </div>
   </div>
 </header>
-<main id="content" tabindex="-1">
+<main id="content" class="page-main" tabindex="-1">
 <article class="post-page">
   <header class="post-header">
     <p class="post-kicker">Journal / Essay</p>
     <h1>안도 다다오의 뮤지엄 산에서</h1>
     <div class="post-meta">
       <time datetime="2026-07-28">2026년 7월 28일</time>
+      <span>1분 읽기</span>
       <ul class="tag-list"><li class="tag">공간</li><li class="tag">빛</li></ul>
     </div>
   </header>
-  <div class="post-content">
+  <div class="post-content" data-reading-content>
 <p>원주의 뮤지엄 산에 다녀왔다. 안도 다다오가 설계한 미술관이고, 안에는 종이 박물관이 있다. 종이를 보러 갔는데, 기억에 남은 건 벽이었다.</p>
 <p>노출 콘크리트는 사진으로 보면 차갑다. 그런데 그 공간 안에 서 있으면 차갑지 않다. 콘크리트가 하는 일이 따로 있었기 때문이다. 벽은 스스로 주인공이 되는 대신 빛을 받는 스크린이 된다. 시간에 따라 벽 위의 빛이 이동하고, 물에 반사된 빛이 천장에 일렁인다. 콘크리트가 무표정해서, 빛의 표정이 보이는 것이다.</p>
 <p>종이 박물관에서 그 대비가 완성됐다. 세상에서 가장 무거운 재료 안에 가장 가벼운 재료가 놓여 있다. 콘크리트가 종이를 지키고, 종이가 콘크리트를 부드럽게 만든다. 어느 쪽도 혼자서는 그 감정을 못 만든다.</p>
@@ -58,7 +66,19 @@
 <p>건축가는 빛을 설계하기 위해 벽을 설계한다. 그 문장을 얻은 것만으로 입장료 값을 했다.</p>
   </div>
 </article>
-<p class="post-nav"><a href="../index.html"><span aria-hidden="true">←</span> 목록으로</a></p>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-07-30-toss-screen.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">토스 화면은 왜 편안한가</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-07-26-quiet-clothes.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">르메르와 COS, 조용한 옷의 문법</span>
+</a>
+  </div>
+</nav>
 </main>
 <footer class="site-footer">
   <div class="site-footer-inner">
