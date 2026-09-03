@@ -31,6 +31,55 @@
 -모든 웹앱은 블로그 색상의 팔레트를 따른다. style.md의 css변수를 참조할것.
 -웹앱에 사용법 안내 문구를 반드시 포함한다.
 
+##SEO
+
+사이트의 정규 주소·메타·광고 설정은 `scripts/site.config.js` 한 곳에 있다.
+주소가 바뀌거나 AdSense를 켤 때 이 파일만 고친다.
+
+빌드가 만들어 주는 것.
+
+- 페이지마다 canonical, Open Graph, Twitter 카드
+- JSON-LD — 홈은 WebSite + Blog, 글은 BlogPosting + BreadcrumbList, 페이지는 WebPage
+- `robots.txt`, `sitemap.xml`
+- `about.html`, `contact.html`, `privacy.html`
+- `ads.txt` — 게시자 ID가 설정됐을 때만
+
+개인정보 처리방침은 손으로 쓰지 않고 설정에서 생성한다. 광고를 켜지 않았는데
+광고 쿠키를 설명하는 방침은 사실이 아니기 때문이다.
+
+### 점검 도구
+
+SEO 점검에는 claude-seo 플러그인을 쓴다. 처음 한 번만 설치하면 된다.
+
+```
+/plugin marketplace add AgriciDaniel/claude-seo
+/plugin install claude-seo@agricidaniel-claude-seo
+/seo setup
+```
+
+쓸 때.
+
+```
+/seo audit https://jcy0908.github.io/my-blog/     전체 감사
+/seo page  <글 주소>                               한 페이지
+```
+
+글을 여러 편 올린 뒤나 템플릿을 고친 뒤에 돌린다.
+
+### AdSense
+
+`scripts/site.config.js`의 `adsense.publisherId`가 비어 있으면 광고 코드도
+`ads.txt`도 생성되지 않는다. 승인 전에 빈 코드를 넣어 둘 이유가 없다.
+
+승인은 코드가 아니라 사이트 상태를 본다. 정해진 글 개수로 보장되지 않으며
+소유권, 정책 준수, 실제 콘텐츠 품질을 본다. 심사용 글을 채웠다가 지우는 식으로
+운영하지 않는다.
+
+준비가 되면 `publisherId`에 `ca-pub-` 로 시작하는 전체 값을 넣고 빌드한다.
+그러면 광고 스크립트, `ads.txt`, 개인정보 처리방침의 광고·쿠키 문단이 함께
+생긴다. 유럽 등 일부 지역은 동의 메시지 설정이 필요하며 AdSense 콘솔에서
+관리한다.
+
 ##규칙
 -승인 없이 구현을 시작하지 않는다
 -막히면 사용자에게 알린다.

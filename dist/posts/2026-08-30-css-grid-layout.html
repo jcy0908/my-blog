@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="CSS Grid로 2차원 레이아웃 잡기. 감도 感度의 기록입니다.">
+<title>CSS Grid로 2차원 레이아웃 잡기 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-30-css-grid-layout.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="CSS Grid로 2차원 레이아웃 잡기">
+<meta property="og:description" content="CSS Grid로 2차원 레이아웃 잡기. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-30-css-grid-layout.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS Grid로 2차원 레이아웃 잡기">
+<meta name="twitter:description" content="CSS Grid로 2차원 레이아웃 잡기. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"CSS Grid로 2차원 레이아웃 잡기","description":"CSS Grid로 2차원 레이아웃 잡기. 감도 感度의 기록입니다.","datePublished":"2026-08-30","dateModified":"2026-08-30","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-30-css-grid-layout.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-30-css-grid-layout.html","keywords":"CSS, 레이아웃","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"CSS Grid로 2차원 레이아웃 잡기","item":"https://jcy0908.github.io/my-blog/posts/2026-08-30-css-grid-layout.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>CSS Grid로 2차원 레이아웃 잡기</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-30">2026년 8월 30일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">CSS</li><li class="tag">레이아웃</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>Flexbox는 한 줄 또는 한 열을 정렬하는 데는 편하지만, 행과 열을 동시에 다루는 레이아웃을 짜려면 마진 계산이 금방 복잡해진다. 오늘은 2차원 레이아웃을 위해 설계된 CSS Grid를 정리했다.</p>
+<h2>컨테이너에 격자 정의하기</h2>
+<p><code>display: grid</code>를 선언한 다음 <code>grid-template-columns</code>와 <code>grid-template-rows</code>로 격자의 크기를 정한다. <code>fr</code> 단위는 남은 공간을 비율대로 나눠 가지는 유연한 단위라서, 픽셀 계산 없이도 반응형 레이아웃을 만들 수 있다.</p>
+<pre><code class="language-css">.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 16px;
+}</code></pre>
+<h2>아이템 배치는 gap과 grid-column으로</h2>
+<p>칸 사이 여백은 <code>gap</code> 속성 하나로 처리하고, 특정 아이템을 여러 칸에 걸치게 하려면 <code>grid-column: span 2</code>처럼 지정하면 된다. 자식 요소마다 마진을 따로 계산하지 않아도 돼서 코드가 훨씬 간결해진다.</p>
+<h2>Flexbox와의 역할 구분</h2>
+<p>Flexbox는 내용의 크기에 맞춰 한 축을 정렬하는 콘텐츠 중심 레이아웃에 어울리고, Grid는 페이지 전체 골격처럼 행과 열을 미리 설계해두는 레이아웃 중심 작업에 어울린다. 실무에서는 큰 틀은 Grid로 짜고 그 안의 카드나 버튼 정렬은 Flexbox로 처리하는 식으로 섞어 쓰는 경우가 많다.</p>
+<p>오늘은 CSS Grid가 <code>fr</code> 단위와 <code>grid-template-columns</code>로 2차원 격자를 어떻게 정의하는지, 그리고 Flexbox와 언제 나눠 써야 하는지를 정리했다. 다음에는 <code>grid-template-areas</code>로 이름 붙여 배치하는 방법도 다뤄봐야겠다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-09-01-mutation-observer.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">DOM 변화를 감지하는 방법, MutationObserver</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-29-web-workers.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">메인 스레드를 막지 않는 법, 웹 워커</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

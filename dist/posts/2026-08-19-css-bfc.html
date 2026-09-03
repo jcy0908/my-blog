@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기. 감도 感度의 기록입니다.">
+<title>여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-19-css-bfc.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기">
+<meta property="og:description" content="여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-19-css-bfc.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기">
+<meta name="twitter:description" content="여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기","description":"여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기. 감도 感度의 기록입니다.","datePublished":"2026-08-19","dateModified":"2026-08-19","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-19-css-bfc.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-19-css-bfc.html","keywords":"CSS, 레이아웃","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기","item":"https://jcy0908.github.io/my-blog/posts/2026-08-19-css-bfc.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>여백이 이상하게 사라질 때, BFC(블록 서식 맥락) 이해하기</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-19">2026년 8월 19일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">CSS</li><li class="tag">레이아웃</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>부모 요소에 분명 자식이 들어있는데 배경이 자식 높이만큼 늘어나지 않거나, 위아래 마진이 예상보다 크게 붙어버릴 때가 있다. 원인을 모르고 <code>overflow: hidden</code>을 붙여봤다가 우연히 해결된 경험이 있다면, 그 뒤에는 BFC라는 개념이 숨어 있다.</p>
+<h2>BFC란 무엇인가</h2>
+<p>BFC(Block Formatting Context)는 블록 요소들이 배치되는 독립된 렌더링 영역이다. 같은 BFC 안의 요소들끼리는 마진이 겹치고(margin collapsing), 내부의 float 영향도 그 영역 안에 갇힌다. 즉 BFC는 레이아웃 계산의 경계선 역할을 한다.</p>
+<h2>언제 새로운 BFC가 생기는가</h2>
+<p>다음 조건 중 하나만 만족해도 새 BFC가 만들어진다.</p>
+<ul><li><code>overflow</code> 값이 <code>visible</code>이 아닐 때</li><li><code>display: flow-root</code>, <code>flex</code>, <code>grid</code>, <code>inline-block</code>일 때</li><li><code>position</code>이 <code>absolute</code> 또는 <code>fixed</code>일 때</li><li><code>float</code>이 <code>none</code>이 아닐 때</li></ul>
+<h2>BFC로 해결되는 대표적인 문제</h2>
+<p>float으로 띄운 자식 때문에 부모의 높이가 0이 되는 문제는, 부모에 새 BFC를 만들면 float 영역까지 포함해서 높이를 계산하므로 해결된다.</p>
+<pre><code class="language-css">.wrapper {
+  display: flow-root;
+}</code></pre>
+<p>과거에는 <code>overflow: hidden</code>으로 같은 효과를 냈지만, 이 방식은 내용이 넘칠 때 잘려 보이는 부작용이 있다. <code>display: flow-root</code>는 오직 BFC 생성만을 위해 만들어진 값이라 부작용이 없다.</p>
+<p>정리하면, BFC는 마진 겹침과 float의 영향 범위를 가두는 독립된 레이아웃 영역이며, <code>flow-root</code>처럼 부작용 없는 방법으로 의도적으로 만들 수 있다는 점을 기억해두면 레이아웃 버그를 마주쳤을 때 원인을 훨씬 빨리 짚어낼 수 있다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-20-font-display.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">폰트가 늦게 뜨는 이유, FOUT와 FOIT 그리고 font-display</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-18-request-animation-frame.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">setTimeout 대신 requestAnimationFrame을 쓰는 이유</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

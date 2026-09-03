@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="부모를 선택하는 CSS, :has() 관계형 슈도클래스. 감도 感度의 기록입니다.">
+<title>부모를 선택하는 CSS, :has() 관계형 슈도클래스 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-26-css-has-selector.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="부모를 선택하는 CSS, :has() 관계형 슈도클래스">
+<meta property="og:description" content="부모를 선택하는 CSS, :has() 관계형 슈도클래스. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-26-css-has-selector.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="부모를 선택하는 CSS, :has() 관계형 슈도클래스">
+<meta name="twitter:description" content="부모를 선택하는 CSS, :has() 관계형 슈도클래스. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"부모를 선택하는 CSS, :has() 관계형 슈도클래스","description":"부모를 선택하는 CSS, :has() 관계형 슈도클래스. 감도 感度의 기록입니다.","datePublished":"2026-08-26","dateModified":"2026-08-26","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-26-css-has-selector.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-26-css-has-selector.html","keywords":"CSS, 선택자","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"부모를 선택하는 CSS, :has() 관계형 슈도클래스","item":"https://jcy0908.github.io/my-blog/posts/2026-08-26-css-has-selector.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>부모를 선택하는 CSS, :has() 관계형 슈도클래스</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-26">2026년 8월 26일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">CSS</li><li class="tag">선택자</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>지금까지 CSS 선택자는 항상 아래로만 향했다. <code>.card img</code>처럼 자식은 고를 수 있어도 "이미지를 가진 카드"처럼 부모를 조건부로 고르는 건 불가능해서 결국 JavaScript로 클래스를 붙이곤 했다. <code>:has()</code>는 이 방향을 뒤집어서 조건에 맞는 자손을 가진 요소 자체를 선택하게 해준다.</p>
+<h2>:has()가 하는 일</h2>
+<p><code>:has()</code>는 괄호 안 선택자에 매칭되는 요소가 하나라도 있으면 참이 되는 슈도클래스다. <code>article:has(img)</code>는 이미지가 들어있는 <code>article</code>만 고른다. 흔히 "부모 선택자"라고 부르지만 실제로는 형제나 자기 자신 이후 요소에도 쓸 수 있어서 더 일반적인 "관계형 선택자"에 가깝다.</p>
+<h2>코드로 보는 활용</h2>
+<pre><code class="language-css">/* 이미지가 없는 카드에만 여백 스타일 적용 */
+.card:not(:has(img)) {
+  padding: 2rem;
+}
+
+/* 체크된 input 바로 다음 라벨 강조 */
+input:checked + label {
+  font-weight: bold;
+}
+
+/* 폼 유효성 실패 필드가 있으면 제출 버튼 흐리게 */
+form:has(:invalid) button[type="submit"] {
+  opacity: 0.5;
+}</code></pre>
+<p>세 번째 예시처럼 폼 전체 상태를 자식 요소들의 상태로 판단할 수 있다는 점이 특히 유용하다.</p>
+<h2>주의할 점</h2>
+<p><code>:has()</code>는 최신 브라우저에서는 대부분 지원되지만, 오래된 브라우저를 지원해야 한다면 여전히 fallback이 필요하다. 또 괄호 안 선택자 범위가 넓으면 브라우저가 매 렌더링마다 자손을 훑어야 해서 성능에 영향을 줄 수 있으므로, 검사 범위를 최대한 좁게 잡는 게 좋다.</p>
+<blockquote><p><code>:has()</code> 덕분에 "조건에 맞는 자손이 있을 때 부모 스타일을 바꾼다"는 로직을 JS 없이 CSS만으로 표현할 수 있게 됐다.</p></blockquote>
+<hr>
+<p>오늘은 <code>:has()</code> 관계형 슈도클래스로 부모나 형제 요소를 자손의 상태에 따라 스타일링하는 방법을 정리했다. 지금까지 클래스 토글로 처리하던 UI 상태 스타일 중 일부는 <code>:has()</code>로 옮겨서 JS 의존도를 줄여볼 수 있을 것 같다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-27-devtools-network-tab.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">크롬 개발자도구 Network 탭으로 성능 디버깅하기</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-25-javascript-closure.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">함수가 자신이 태어난 환경을 기억하는 법, 클로저</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

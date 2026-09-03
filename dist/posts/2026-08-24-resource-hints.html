@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="브라우저에 미리 알려주기, preload와 preconnect. 감도 感度의 기록입니다.">
+<title>브라우저에 미리 알려주기, preload와 preconnect — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-24-resource-hints.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="브라우저에 미리 알려주기, preload와 preconnect">
+<meta property="og:description" content="브라우저에 미리 알려주기, preload와 preconnect. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-24-resource-hints.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="브라우저에 미리 알려주기, preload와 preconnect">
+<meta name="twitter:description" content="브라우저에 미리 알려주기, preload와 preconnect. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"브라우저에 미리 알려주기, preload와 preconnect","description":"브라우저에 미리 알려주기, preload와 preconnect. 감도 感度의 기록입니다.","datePublished":"2026-08-24","dateModified":"2026-08-24","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-24-resource-hints.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-24-resource-hints.html","keywords":"HTML, 성능","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"브라우저에 미리 알려주기, preload와 preconnect","item":"https://jcy0908.github.io/my-blog/posts/2026-08-24-resource-hints.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>브라우저에 미리 알려주기, preload와 preconnect</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-24">2026년 8월 24일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">HTML</li><li class="tag">성능</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>브라우저는 HTML을 위에서부터 파싱하며 필요한 리소스를 그때그때 발견한다. 그런데 정작 중요한 파일이 CSS 안 <code>@font-face</code>나 자바스크립트 뒤쪽에 숨어 있으면 요청이 늦게 시작된다. <code>&lt;link rel="preload"&gt;</code> 같은 리소스 힌트는 이 순서를 브라우저에게 미리 알려주는 역할을 한다.</p>
+<h2>preload는 이번 페이지에 확실히 쓸 파일</h2>
+<p><code>&lt;link rel="preload" href="/fonts/main.woff2" as="font" crossorigin&gt;</code>처럼 쓰면 브라우저는 파서가 그 위치에 도달하기 전에 곧바로 다운로드를 시작한다. 대신 실제로 쓰이지 않는 파일을 preload하면 대역폭만 낭비하므로, 화면에 바로 보이는 폰트나 히어로 이미지처럼 확실히 필요한 리소스에만 써야 한다.</p>
+<h2>prefetch와 preconnect는 성격이 다르다</h2>
+<p><code>prefetch</code>는 지금 페이지가 아니라 다음에 이동할 가능성이 있는 페이지의 리소스를 유휴 시간에 미리 받아두는 힌트라 우선순위가 낮다. <code>preconnect</code>는 파일을 받는 게 아니라 DNS 조회, TCP 연결, TLS 협상까지만 미리 끝내둬서, 실제 요청이 시작될 때 왕복 시간을 줄여준다. 외부 폰트 CDN이나 API 도메인처럼 곧 요청할 게 확실한 origin에 붙이면 효과가 크다.</p>
+<pre><code>&lt;link rel="preconnect" href="https://fonts.example.com" crossorigin&gt;
+&lt;link rel="preload" href="/fonts/main.woff2" as="font" crossorigin&gt;</code></pre>
+<p>세 힌트 모두 남용하면 오히려 우선순위가 뒤섞여 정작 중요한 리소스가 밀릴 수 있다. 오늘은 preload는 확정된 리소스를 앞당기고, prefetch는 다음 탐색을 대비하고, preconnect는 연결 자체를 미리 맺어둔다는 역할 차이를 정리했다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-25-javascript-closure.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">함수가 자신이 태어난 환경을 기억하는 법, 클로저</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-23-git-bisect.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">버그가 생긴 커밋 찾기, git bisect</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>
