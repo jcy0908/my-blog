@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="브라우저는 언제 다시 요청할까, Cache-Control 헤더. 감도 感度의 기록입니다.">
+<title>브라우저는 언제 다시 요청할까, Cache-Control 헤더 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-21-http-caching.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="브라우저는 언제 다시 요청할까, Cache-Control 헤더">
+<meta property="og:description" content="브라우저는 언제 다시 요청할까, Cache-Control 헤더. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-21-http-caching.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="브라우저는 언제 다시 요청할까, Cache-Control 헤더">
+<meta name="twitter:description" content="브라우저는 언제 다시 요청할까, Cache-Control 헤더. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"브라우저는 언제 다시 요청할까, Cache-Control 헤더","description":"브라우저는 언제 다시 요청할까, Cache-Control 헤더. 감도 感度의 기록입니다.","datePublished":"2026-08-21","dateModified":"2026-08-21","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-21-http-caching.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-21-http-caching.html","keywords":"네트워크, 성능","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"브라우저는 언제 다시 요청할까, Cache-Control 헤더","item":"https://jcy0908.github.io/my-blog/posts/2026-08-21-http-caching.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>브라우저는 언제 다시 요청할까, Cache-Control 헤더</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-21">2026년 8월 21일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">네트워크</li><li class="tag">성능</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>같은 이미지를 새로고침할 때마다 다시 받아온다면 사이트가 느려질 수밖에 없다. 브라우저가 이미 받은 파일을 언제 다시 쓰고 언제 새로 요청할지는 서버가 응답에 실어 보내는 <code>Cache-Control</code> 헤더가 결정한다.</p>
+<h2>max-age와 no-cache는 다르다</h2>
+<p><code>Cache-Control: max-age=3600</code>은 응답을 1시간 동안 신선하다고 보고, 그 안에는 서버에 묻지도 않고 캐시를 그대로 쓴다. 반면 <code>no-cache</code>는 캐시를 저장은 하되 매번 서버에 유효성을 확인받고 쓰라는 뜻이라, 이름과 달리 캐시를 아예 안 쓰는 게 아니다. 정말 저장 자체를 막으려면 <code>no-store</code>를 써야 한다.</p>
+<h2>유효성 검사는 ETag로</h2>
+<p>캐시 기간이 지나도 파일 내용이 그대로라면 다시 받을 필요는 없다. 이때 서버가 응답에 담아준 <code>ETag</code> 값을 다음 요청의 <code>If-None-Match</code>에 실어 보내면, 내용이 같을 경우 서버는 본문 없이 <code>304 Not Modified</code>만 돌려준다.</p>
+<pre><code>Cache-Control: max-age=3600
+ETag: "a1b2c3"</code></pre>
+<p>정적 자산은 <code>max-age</code>를 길게 주고 파일명에 해시를 붙여 무효화하는 방식이 흔하며, 자주 바뀌는 API 응답은 <code>no-cache</code>와 <code>ETag</code>를 조합해 트래픽은 줄이면서도 최신 상태를 보장한다. 오늘은 "캐시를 쓸지"와 "캐시가 최신인지 확인할지"가 서로 다른 문제라는 걸 정리했다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-22-web-storage.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">새로고침해도 남아있는 데이터, Web Storage 이야기</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-20-font-display.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">폰트가 늦게 뜨는 이유, FOUT와 FOIT 그리고 font-display</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

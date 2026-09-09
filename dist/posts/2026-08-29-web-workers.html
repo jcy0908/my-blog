@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="메인 스레드를 막지 않는 법, 웹 워커. 감도 感度의 기록입니다.">
+<title>메인 스레드를 막지 않는 법, 웹 워커 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-29-web-workers.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="메인 스레드를 막지 않는 법, 웹 워커">
+<meta property="og:description" content="메인 스레드를 막지 않는 법, 웹 워커. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-29-web-workers.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="메인 스레드를 막지 않는 법, 웹 워커">
+<meta name="twitter:description" content="메인 스레드를 막지 않는 법, 웹 워커. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"메인 스레드를 막지 않는 법, 웹 워커","description":"메인 스레드를 막지 않는 법, 웹 워커. 감도 感度의 기록입니다.","datePublished":"2026-08-29","dateModified":"2026-08-29","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-29-web-workers.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-29-web-workers.html","keywords":"JavaScript, 성능","timeRequired":"PT2M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"메인 스레드를 막지 않는 법, 웹 워커","item":"https://jcy0908.github.io/my-blog/posts/2026-08-29-web-workers.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>메인 스레드를 막지 않는 법, 웹 워커</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-29">2026년 8월 29일</time>
+      <span>2분 읽기</span>
+      <ul class="tag-list"><li class="tag">JavaScript</li><li class="tag">성능</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>자바스크립트는 싱글 스레드라서 무거운 계산을 돌리면 그동안 화면이 멈춘다. 버튼도 안 눌리고 스크롤도 안 되는 그 답답한 순간, 해결책이 바로 웹 워커다. 오늘은 워커가 메인 스레드와 어떻게 분리되어 동작하는지 정리했다.</p>
+<h2>별도의 스레드, 별도의 세계</h2>
+<p><code>new Worker('worker.js')</code>로 워커를 만들면 브라우저는 완전히 독립된 스레드에서 그 스크립트를 실행한다. 워커 안에서는 <code>window</code>나 DOM에 접근할 수 없다. 화면을 직접 건드릴 수 없는 대신, 메인 스레드가 하던 무거운 계산을 떠맡아도 화면은 얼어붙지 않는다.</p>
+<h2>메시지로만 대화한다</h2>
+<p>메인 스레드와 워커는 변수를 공유하지 않고 <code>postMessage</code>로 메시지를 주고받는다. 데이터는 복사되어 전달되기 때문에, 워커 쪽에서 값을 바꿔도 원본에는 영향이 없다.</p>
+<pre><code>// main.js
+const worker = new Worker('worker.js');
+worker.postMessage(1000000);
+worker.onmessage = (e) =&gt; console.log('결과:', e.data);
+
+// worker.js
+onmessage = (e) =&gt; {
+  let sum = 0;
+  for (let i = 0; i &lt; e.data; i++) sum += i;
+  postMessage(sum);
+};</code></pre>
+<p>이 구조 덕분에 큰 숫자를 더하는 동안에도 메인 스레드는 다른 이벤트를 자유롭게 처리한다.</p>
+<h2>언제 꺼내 쓰면 좋을까</h2>
+<p>이미지 처리, 대용량 JSON 파싱, 복잡한 정렬처럼 CPU를 오래 붙잡는 작업이 후보다. 반대로 짧게 끝나는 작업까지 워커로 보내면 메시지를 주고받는 오버헤드가 더 커질 수 있다. 워커 생성 비용도 있으니 자주 반복되는 작업이라면 워커를 매번 새로 만들기보다 하나를 계속 재사용하는 편이 낫다.</p>
+<p>정리하면, 웹 워커는 무거운 계산을 메인 스레드 밖으로 빼내 화면이 멈추지 않게 해주는 도구이며, DOM에 접근할 수 없고 메시지로만 통신한다는 제약을 이해하고 써야 제대로 효과를 본다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-30-css-grid-layout.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">CSS Grid로 2차원 레이아웃 잡기</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-28-css-container-queries.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

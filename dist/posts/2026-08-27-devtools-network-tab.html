@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="크롬 개발자도구 Network 탭으로 성능 디버깅하기. 감도 感度의 기록입니다.">
+<title>크롬 개발자도구 Network 탭으로 성능 디버깅하기 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-27-devtools-network-tab.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="크롬 개발자도구 Network 탭으로 성능 디버깅하기">
+<meta property="og:description" content="크롬 개발자도구 Network 탭으로 성능 디버깅하기. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-27-devtools-network-tab.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="크롬 개발자도구 Network 탭으로 성능 디버깅하기">
+<meta name="twitter:description" content="크롬 개발자도구 Network 탭으로 성능 디버깅하기. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"크롬 개발자도구 Network 탭으로 성능 디버깅하기","description":"크롬 개발자도구 Network 탭으로 성능 디버깅하기. 감도 感度의 기록입니다.","datePublished":"2026-08-27","dateModified":"2026-08-27","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-27-devtools-network-tab.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-27-devtools-network-tab.html","keywords":"개발도구, 디버깅, 성능최적화","timeRequired":"PT2M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"크롬 개발자도구 Network 탭으로 성능 디버깅하기","item":"https://jcy0908.github.io/my-blog/posts/2026-08-27-devtools-network-tab.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>크롬 개발자도구 Network 탭으로 성능 디버깅하기</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-27">2026년 8월 27일</time>
+      <span>2분 읽기</span>
+      <ul class="tag-list"><li class="tag">개발도구</li><li class="tag">디버깅</li><li class="tag">성능최적화</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>페이지가 느리다는 제보를 받으면 코드를 뜯어보기 전에 먼저 열어야 하는 게 Network 탭이다. 오늘은 이 탭이 보여주는 정보를 어떻게 읽어야 하는지 정리했다.</p>
+<h2>워터폴 차트 읽는 법</h2>
+<p>각 요청 행 옆의 막대는 요청이 어느 구간에서 시간을 썼는지 보여준다. 연한 부분은 Queueing이나 Stalled처럼 브라우저가 요청을 아직 보내지 못한 대기 시간이고, 진한 부분은 실제 서버 응답을 기다리는 Waiting(TTFB)과 데이터를 받는 Content Download다. 막대가 오른쪽으로 길게 밀려 있다면 요청 자체보다 앞선 요청들 때문에 대기 중일 가능성이 크다.</p>
+<h2>Waterfall이 아니라 요약 통계 먼저 보기</h2>
+<p>탭 하단의 요약 바는 전체 요청 수, 전송 용량, 로드 완료 시간을 보여준다. 개별 요청을 하나씩 뜯기 전에 이 숫자부터 확인하면 "요청이 너무 많은 문제"인지 "특정 요청 하나가 느린 문제"인지 방향을 빠르게 잡을 수 있다.</p>
+<h2>스로틀링으로 실제 사용자 환경 재현하기</h2>
+<p>상단의 네트워크 조건 드롭다운에서 Slow 3G나 Fast 4G를 선택하면 느린 회선에서의 로딩을 그대로 재현할 수 있다. 개발 환경은 보통 로컬망이라 빠르게 느껴지지만, 실제 사용자는 훨씬 느린 환경일 수 있으므로 스로틀링을 켜고 확인하는 습관이 중요하다.</p>
+<h2>캐시 무시 옵션 활용하기</h2>
+<p><code>Disable cache</code> 체크박스를 켜면 캐시된 리소스를 무시하고 매번 새로 받아온다. 캐싱 정책을 바꾼 뒤 실제로 헤더가 의도대로 적용됐는지 확인할 때 이 옵션을 꺼두면 이전 캐시 때문에 헷갈리는 일을 막을 수 있다.</p>
+<p>Network 탭은 단순히 요청 목록이 아니라 각 요청이 어디서 시간을 쓰는지, 전체 로딩이 왜 느린지 구조적으로 보여주는 도구이며, 워터폴과 스로틀링을 함께 활용하면 성능 문제의 원인을 훨씬 빠르게 좁힐 수 있다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-28-css-container-queries.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-26-css-has-selector.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">부모를 선택하는 CSS, :has() 관계형 슈도클래스</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

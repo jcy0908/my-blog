@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="함수가 자신이 태어난 환경을 기억하는 법, 클로저. 감도 感度의 기록입니다.">
+<title>함수가 자신이 태어난 환경을 기억하는 법, 클로저 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-25-javascript-closure.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="함수가 자신이 태어난 환경을 기억하는 법, 클로저">
+<meta property="og:description" content="함수가 자신이 태어난 환경을 기억하는 법, 클로저. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-25-javascript-closure.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="함수가 자신이 태어난 환경을 기억하는 법, 클로저">
+<meta name="twitter:description" content="함수가 자신이 태어난 환경을 기억하는 법, 클로저. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"함수가 자신이 태어난 환경을 기억하는 법, 클로저","description":"함수가 자신이 태어난 환경을 기억하는 법, 클로저. 감도 感度의 기록입니다.","datePublished":"2026-08-25","dateModified":"2026-08-25","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-25-javascript-closure.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-25-javascript-closure.html","keywords":"JavaScript, 클로저","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"함수가 자신이 태어난 환경을 기억하는 법, 클로저","item":"https://jcy0908.github.io/my-blog/posts/2026-08-25-javascript-closure.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>함수가 자신이 태어난 환경을 기억하는 법, 클로저</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-25">2026년 8월 25일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">JavaScript</li><li class="tag">클로저</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>함수를 반환하는 함수를 쓰다 보면 바깥 함수가 끝났는데도 그 안의 변수를 계속 참조하는 코드를 종종 본다. 오늘은 이 동작의 정체인 클로저(Closure)를 정리했다. 함수와 함수가 선언될 당시의 렉시컬 환경이 묶여서 함께 살아남는 현상이다.</p>
+<h2>렉시컬 스코프가 핵심이다</h2>
+<p>자바스크립트 함수는 호출된 위치가 아니라 정의된 위치를 기준으로 상위 스코프를 찾는다. 내부 함수가 외부 함수의 변수를 참조하면, 외부 함수 실행이 끝나도 그 변수는 가비지 컬렉션되지 않고 내부 함수와 함께 남는다.</p>
+<h2>카운터 예시로 보기</h2>
+<pre><code>function createCounter() {
+  let count = 0;
+  return function () {
+    count += 1;
+    return count;
+  };
+}
+
+const counter = createCounter();
+counter(); // 1
+counter(); // 2</code></pre>
+<p><code>createCounter</code> 는 이미 끝났지만 반환된 함수는 여전히 <code>count</code> 를 기억하고 증가시킨다. 이게 바로 클로저다.</p>
+<h2>반복문에서의 흔한 함정</h2>
+<p><code>var</code> 로 반복문 변수를 선언하면 함수 스코프라서 모든 클로저가 같은 변수를 공유해 마지막 값만 참조하게 된다. <code>let</code> 은 블록마다 새 바인딩을 만들기 때문에 반복마다 독립된 값을 클로저가 기억한다. 이 차이 때문에 <code>setTimeout</code> 을 반복문 안에서 쓸 때 결과가 달라진다.</p>
+<p>클로저는 특별한 문법이 아니라 함수와 그 정의 시점의 스코프가 함께 묶이는 자연스러운 결과이며, 이 원리를 알면 상태를 캡슐화하거나 반복문 버그를 피하는 데 도움이 된다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-26-css-has-selector.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">부모를 선택하는 CSS, :has() 관계형 슈도클래스</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-24-resource-hints.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">브라우저에 미리 알려주기, preload와 preconnect</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

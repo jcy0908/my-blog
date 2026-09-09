@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리. 감도 感度의 기록입니다.">
+<title>화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리 — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-08-28-css-container-queries.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리">
+<meta property="og:description" content="화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-08-28-css-container-queries.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리">
+<meta name="twitter:description" content="화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리","description":"화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리. 감도 感度의 기록입니다.","datePublished":"2026-08-28","dateModified":"2026-08-28","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-08-28-css-container-queries.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-08-28-css-container-queries.html","keywords":"CSS, 반응형","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리","item":"https://jcy0908.github.io/my-blog/posts/2026-08-28-css-container-queries.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>화면 크기가 아니라 부모 크기로 반응하기, CSS 컨테이너 쿼리</h1>
+    <div class="post-meta">
+      <time datetime="2026-08-28">2026년 8월 28일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">CSS</li><li class="tag">반응형</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>미디어 쿼리는 항상 뷰포트 너비를 기준으로 삼는다. 그런데 같은 카드 컴포넌트가 넓은 메인 영역에도, 좁은 사이드바에도 들어간다면 뷰포트만으로는 각 위치에 맞는 스타일을 줄 수 없다. 이 문제를 풀어주는 게 <strong>컨테이너 쿼리</strong>다.</p>
+<h2>컨테이너로 지정하기</h2>
+<p>먼저 기준이 될 부모 요소에 <code>container-type</code>을 선언해야 한다.</p>
+<pre><code class="language-css">.card-wrapper {
+  container-type: inline-size;
+  container-name: card;
+}</code></pre>
+<p><code>inline-size</code>는 가로 폭을 기준으로 삼겠다는 뜻이다.</p>
+<h2>컨테이너 쿼리 적용하기</h2>
+<p>이제 자식 요소는 뷰포트가 아니라 저 컨테이너의 크기를 기준으로 스타일을 바꿀 수 있다.</p>
+<pre><code class="language-css">@container card (min-width: 400px) {
+  .card-title {
+    font-size: 1.5rem;
+  }
+}</code></pre>
+<p>같은 <code>.card-title</code>이라도 좁은 컨테이너 안에서는 작게, 넓은 컨테이너 안에서는 크게 렌더링된다.</p>
+<h2>미디어 쿼리와의 차이</h2>
+<blockquote><p>미디어 쿼리: "화면이 이 정도 넓은가?" 컨테이너 쿼리: "내가 들어있는 상자가 이 정도 넓은가?"</p></blockquote>
+<p>컴포넌트를 재사용 가능하게 설계할 때는 후자가 훨씬 자연스럽다.</p>
+<p>정리하면, 컨테이너 쿼리는 컴포넌트 스스로 자기 자리의 크기를 인지하고 반응하게 만들어 준다. 디자인 시스템처럼 같은 컴포넌트를 여러 레이아웃에 재사용해야 하는 상황에서 특히 유용하다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-08-29-web-workers.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">메인 스레드를 막지 않는 법, 웹 워커</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-08-27-devtools-network-tab.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">크롬 개발자도구 Network 탭으로 성능 디버깅하기</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

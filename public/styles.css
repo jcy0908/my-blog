@@ -1335,3 +1335,26 @@ pre code {
     transform: none;
   }
 }
+
+/* 사이트 정보 링크 — 소개·연락·개인정보 처리방침.
+   본문을 방해하지 않게 푸터 안에서 조용히 둔다. */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.footer-nav a {
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus-visible {
+  color: var(--ink);
+  border-bottom-color: var(--line-strong);
+}

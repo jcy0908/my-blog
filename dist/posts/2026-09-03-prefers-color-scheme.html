@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme. 감도 感度의 기록입니다.">
+<title>다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-09-03-prefers-color-scheme.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme">
+<meta property="og:description" content="다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-09-03-prefers-color-scheme.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme">
+<meta name="twitter:description" content="다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme","description":"다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme. 감도 感度의 기록입니다.","datePublished":"2026-09-03","dateModified":"2026-09-03","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-09-03-prefers-color-scheme.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-09-03-prefers-color-scheme.html","keywords":"CSS, 다크모드","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme","item":"https://jcy0908.github.io/my-blog/posts/2026-09-03-prefers-color-scheme.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme</h1>
+    <div class="post-meta">
+      <time datetime="2026-09-03">2026년 9월 3일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">CSS</li><li class="tag">다크모드</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>운영체제 설정을 다크 모드로 바꾸면 방문한 적도 없는 사이트가 알아서 어두운 배경으로 뜨는 경우가 있다. 자바스크립트 없이 CSS만으로 이런 반응이 가능하다는 걸 오늘 다시 확인했다.</p>
+<h2>미디어 쿼리로 감지하기</h2>
+<p><code>prefers-color-scheme</code>은 사용자의 시스템 색상 모드를 읽는 미디어 쿼리다. <code>light</code>와 <code>dark</code> 두 값을 가지며, 값에 따라 다른 색상 변수를 적용할 수 있다.</p>
+<pre><code>:root {
+  --bg: #ffffff;
+  --text: #111111;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111111;
+    --text: #eeeeee;
+  }
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+}</code></pre>
+<h2>color-scheme으로 브라우저 기본 UI까지 맞추기</h2>
+<p><code>color-scheme: light dark;</code>를 지정하면 스크롤바, 폼 요소 같은 브라우저 기본 UI도 현재 모드에 맞춰 자동으로 바뀐다. 색상 변수만 바꾸면 배경과 글자색은 맞아도 스크롤바만 밝게 남는 경우가 있는데, 이 속성이 그 어색함을 해결해준다.</p>
+<h2>사용자가 직접 고르게 하기</h2>
+<p>시스템 설정만 따르면 사이트 안에서 모드를 바꿀 수 없다. <code>html</code>에 <code>data-theme</code> 속성을 두고 버튼으로 값을 토글한 뒤, <code>[data-theme="dark"]</code> 선택자가 미디어 쿼리보다 우선하도록 CSS 순서를 정하면 시스템 설정과 사용자 선택을 함께 지원할 수 있다.</p>
+<p>시스템 설정을 기본값으로 따르되 사용자가 직접 바꿀 수 있는 여지를 남겨두는 것이 다크 모드 구현의 핵심이다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-older" href="./2026-09-02-resize-observer.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">요소 크기 변화를 감지하는 방법, ResizeObserver</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>

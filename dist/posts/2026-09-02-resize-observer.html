@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f2ec">
+<meta name="description" content="요소 크기 변화를 감지하는 방법, ResizeObserver. 감도 感度의 기록입니다.">
+<title>요소 크기 변화를 감지하는 방법, ResizeObserver — 감도 感度</title>
+<link rel="canonical" href="https://jcy0908.github.io/my-blog/posts/2026-09-02-resize-observer.html">
+
+<!-- 공유될 때 보이는 것. 제목·설명·주소를 정규 주소와 같게 유지한다. -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="감도 感度">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="요소 크기 변화를 감지하는 방법, ResizeObserver">
+<meta property="og:description" content="요소 크기 변화를 감지하는 방법, ResizeObserver. 감도 感度의 기록입니다.">
+<meta property="og:url" content="https://jcy0908.github.io/my-blog/posts/2026-09-02-resize-observer.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="요소 크기 변화를 감지하는 방법, ResizeObserver">
+<meta name="twitter:description" content="요소 크기 변화를 감지하는 방법, ResizeObserver. 감도 感度의 기록입니다.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"요소 크기 변화를 감지하는 방법, ResizeObserver","description":"요소 크기 변화를 감지하는 방법, ResizeObserver. 감도 感度의 기록입니다.","datePublished":"2026-09-02","dateModified":"2026-09-02","inLanguage":"ko","author":{"@type":"Person","name":"정찬용"},"publisher":{"@type":"Person","name":"정찬용"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jcy0908.github.io/my-blog/posts/2026-09-02-resize-observer.html"},"url":"https://jcy0908.github.io/my-blog/posts/2026-09-02-resize-observer.html","keywords":"JavaScript, 브라우저","timeRequired":"PT1M"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"감도 感度","item":"https://jcy0908.github.io/my-blog/"},{"@type":"ListItem","position":2,"name":"요소 크기 변화를 감지하는 방법, ResizeObserver","item":"https://jcy0908.github.io/my-blog/posts/2026-09-02-resize-observer.html"}]}</script>
+
+<link rel="stylesheet" href="../styles.css">
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  try {
+    var theme = localStorage.getItem('theme');
+    if (theme === 'dark' || theme === 'light') {
+      root.dataset.theme = theme;
+    }
+  } catch (e) {}
+  var dark = root.dataset.theme === 'dark' ||
+    (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
+})();
+</script>
+</head>
+<body class="page-post">
+<a class="skip-link" href="#content">본문으로 건너뛰기</a>
+<div class="reading-progress" role="progressbar" aria-label="글 읽기 진행률" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <span class="reading-progress-fill"></span>
+</div>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-title" href="../index.html" aria-label="감도 홈">
+      <span>감도</span><span class="hanja">感度</span>
+    </a>
+    <div class="site-tools">
+      <nav class="site-nav" aria-label="주요 메뉴">
+        <a href="../index.html#essays">Journal</a>
+        <a href="../index.html#playground">Objects</a>
+      </nav>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false">
+        <span class="theme-toggle-mark" aria-hidden="true"></span>
+        <span class="theme-toggle-label" aria-hidden="true">Theme</span>
+        <span class="visually-hidden">테마 전환</span>
+      </button>
+    </div>
+  </div>
+</header>
+<main id="content" class="page-main" tabindex="-1">
+<article class="post-page">
+  <header class="post-header">
+    <p class="post-kicker">Journal / Essay</p>
+    <h1>요소 크기 변화를 감지하는 방법, ResizeObserver</h1>
+    <div class="post-meta">
+      <time datetime="2026-09-02">2026년 9월 2일</time>
+      <span>1분 읽기</span>
+      <ul class="tag-list"><li class="tag">JavaScript</li><li class="tag">브라우저</li></ul>
+    </div>
+  </header>
+  <div class="post-content" data-reading-content>
+<p>반응형 레이아웃을 만들다 보면 창 크기가 아니라 <strong>특정 요소 자체</strong>의 크기 변화에 반응해야 할 때가 있다. 사이드바를 접었다 펴거나, 부모 컨테이너가 유동적으로 늘었다 줄어들 때가 그렇다. 예전에는 <code>resize</code> 이벤트나 폴링으로 어설프게 흉내 냈지만, 이제는 <code>ResizeObserver</code>라는 전용 API가 있다.</p>
+<h2>window resize의 한계</h2>
+<p><code>window.resize</code>는 브라우저 창 크기만 감지한다. 요소가 flex나 grid 안에서 부모 크기에 따라 커지거나 줄어드는 경우는 잡아내지 못한다. 결국 개발자들은 <code>setInterval</code>로 크기를 계속 확인하는 편법을 썼는데, 성능 낭비가 컸다.</p>
+<h2>ResizeObserver 기본 사용법</h2>
+<p><code>ResizeObserver</code>는 지정한 요소의 크기가 바뀔 때마다 콜백을 실행한다.</p>
+<pre><code class="language-js">const observer = new ResizeObserver((entries) =&gt; {
+  for (const entry of entries) {
+    console.log(entry.contentRect.width, entry.contentRect.height);
+  }
+});
+
+observer.observe(document.querySelector(".card"));</code></pre>
+<p><code>entry.contentRect</code>에는 padding을 제외한 콘텐츠 영역의 너비와 높이가 담긴다. 더 이상 필요 없으면 <code>observer.unobserve(element)</code>나 <code>observer.disconnect()</code>로 정리한다.</p>
+<h2>활용 예시</h2>
+<p>카드 너비가 300px 아래로 줄어들면 클래스를 붙여 레이아웃을 컴팩트하게 바꾸는 식으로, 컨테이너 쿼리가 없던 시절의 반응형 컴포넌트를 직접 구현할 수 있었다. 지금은 CSS <code>@container</code>가 비슷한 역할을 하지만, JS 쪽 로직(차트 리사이즈, 캔버스 재계산)과 연결하려면 여전히 <code>ResizeObserver</code>가 유용하다.</p>
+<blockquote><p>요소 단위의 반응형이 필요하다면 window보다 그 요소 자체를 관찰하는 편이 정확하다.</p></blockquote>
+<p><code>MutationObserver</code>가 DOM 구조 변화를, <code>IntersectionObserver</code>가 뷰포트 교차를 감지하듯 <code>ResizeObserver</code>는 크기 변화를 감지하는 전용 도구다. 세 옵저버를 구분해서 기억해두면 상황에 맞는 API를 훨씬 빠르게 고를 수 있다.</p>
+  </div>
+</article>
+<nav class="post-navigation" aria-label="글 탐색">
+  <a class="post-index-link" href="../index.html#essays"><span aria-hidden="true">←</span> 모든 글</a>
+  <div class="post-sibling-links">
+    <a class="post-sibling post-sibling-newer" href="./2026-09-03-prefers-color-scheme.html">
+  <span class="post-sibling-label">← 새 글</span>
+  <span class="post-sibling-title">다크 모드는 어떻게 자동으로 켜지는가, prefers-color-scheme</span>
+</a>
+    <a class="post-sibling post-sibling-older" href="./2026-09-01-mutation-observer.html">
+  <span class="post-sibling-label">이전 글 →</span>
+  <span class="post-sibling-title">DOM 변화를 감지하는 방법, MutationObserver</span>
+</a>
+  </div>
+</nav>
+</main>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <p class="footer-name">감도 <span>感度</span></p>
+    <nav class="footer-nav" aria-label="사이트 정보">
+      <a href="../about.html">소개</a>
+      <a href="../contact.html">연락</a>
+      <a href="../privacy.html">개인정보 처리방침</a>
+    </nav>
+    <p>&copy; 2026 감도 感度 — 프레임워크 없이 HTML, CSS, JS로 직접 만들었습니다.</p>
+    <p class="footer-note">Studies in Sensibility</p>
+  </div>
+</footer>
+<script type="module" src="../theme.js"></script>
+</body>
+</html>
