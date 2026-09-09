@@ -66,6 +66,7 @@ export function layout({ title, basePath, bodyHtml, pageType = 'home', descripti
   document.querySelector('meta[name="theme-color"]').content = dark ? '#1b1b19' : '#f4f2ec';
 })();
 </script>
+<link rel="stylesheet" href="${basePath}member/studio.css?v=20260909">
 </head>
 <body class="page-${escapeHtml(pageType)}">
 <a class="skip-link" href="#content">본문으로 건너뛰기</a>
@@ -99,6 +100,8 @@ ${bodyHtml}
   </div>
 </footer>
 <script type="module" src="${basePath}theme.js"></script>
+<script src="${basePath}member/config.js?v=20260909" defer></script>
+<script src="${basePath}member/studio.js?v=20260909" defer></script>
 </body>
 </html>
 `;
@@ -229,3 +232,4 @@ ${post.html}
     description: `${post.title}. 감도 感度의 기록입니다.`,
   });
 }
+
